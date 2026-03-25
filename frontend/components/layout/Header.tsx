@@ -1,7 +1,5 @@
 "use client";
 
-import { APP_NAME, APP_SUBTITLE } from "@/lib/constants";
-
 interface HeaderProps {
   conversationTitle: string | null;
   sidebarOpen: boolean;
@@ -15,12 +13,14 @@ export default function Header({
   onToggleSidebar,
   onOpenInfo,
 }: HeaderProps) {
+  const inChat = !!conversationTitle;
+
   return (
     <header
       style={{
         height: "var(--header-height)",
-        background: "var(--color-bg-secondary)",
-        borderBottom: "1px solid var(--color-border-light)",
+        background: inChat ? "var(--color-bg-header-active)" : "var(--color-bg-secondary)",
+        borderBottom: inChat ? "none" : "1px solid var(--color-border-light)",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -51,9 +51,12 @@ export default function Header({
             justifyContent: "center",
             transition: "background var(--transition-fast)",
             flexShrink: 0,
+            color: inChat ? "#ffffff" : "inherit",
           }}
           onMouseEnter={(e) =>
-            (e.currentTarget.style.background = "var(--color-bg-hover)")
+            (e.currentTarget.style.background = inChat
+              ? "rgba(255,255,255,0.1)"
+              : "var(--color-bg-hover)")
           }
           onMouseLeave={(e) =>
             (e.currentTarget.style.background = "transparent")
@@ -68,29 +71,50 @@ export default function Header({
             />
           </svg>
         </button>
-        <div style={{ minWidth: 0 }}>
-          <div
-            style={{
-              fontWeight: 600,
-              fontSize: "var(--font-size-base)",
-              color: "var(--color-text-primary)",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {conversationTitle ?? APP_NAME}
+
+        {inChat ? (
+          <div style={{ minWidth: 0 }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+              }}
+            >
+              {/* Lightning bolt icon */}
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M9 1L3 9h4l-1 6 6-8H8l1-6z"
+                  fill="#f59e0b"
+                  stroke="#f59e0b"
+                  strokeWidth="0.5"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span
+                style={{
+                  fontWeight: 700,
+                  fontSize: "var(--font-size-base)",
+                  color: "#ffffff",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {conversationTitle}
+              </span>
+            </div>
+            <div
+              style={{
+                fontSize: "var(--font-size-2xs)",
+                color: "rgba(255,255,255,0.65)",
+                marginTop: -1,
+              }}
+            >
+              Answers are grounded in retrieved manual content with source citations.
+            </div>
           </div>
-          <div
-            style={{
-              fontSize: "var(--font-size-2xs)",
-              color: "var(--color-text-muted)",
-              marginTop: -1,
-            }}
-          >
-            {APP_SUBTITLE}
-          </div>
-        </div>
+        ) : null}
       </div>
 
       <button
@@ -106,9 +130,12 @@ export default function Header({
           justifyContent: "center",
           transition: "background var(--transition-fast)",
           flexShrink: 0,
+          color: inChat ? "#ffffff" : "inherit",
         }}
         onMouseEnter={(e) =>
-          (e.currentTarget.style.background = "var(--color-bg-hover)")
+          (e.currentTarget.style.background = inChat
+            ? "rgba(255,255,255,0.1)"
+            : "var(--color-bg-hover)")
         }
         onMouseLeave={(e) =>
           (e.currentTarget.style.background = "transparent")
@@ -123,11 +150,10 @@ export default function Header({
             strokeWidth="1.5"
           />
           <path
-            d="M8 7.5a2 2 0 0 1 3.94.5c0 1-1.44 1.5-1.44 1.5M10 13.5v.01"
+            d="M10 9v4M10 7v.01"
             stroke="currentColor"
             strokeWidth="1.5"
             strokeLinecap="round"
-            strokeLinejoin="round"
           />
         </svg>
       </button>

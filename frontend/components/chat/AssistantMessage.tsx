@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { formatMessageTime } from "@/lib/utils";
 import CitationPanel from "./CitationPanel";
 import type { Message } from "@/lib/types";
 
@@ -28,7 +27,6 @@ export default function AssistantMessage({
       setSubmitting(true);
       setFeedbackGiven(rating);
       onFeedback(message.id, rating);
-      // Reset submitting guard after a short delay to prevent rapid re-clicks
       setTimeout(() => setSubmitting(false), 1000);
     },
     [feedbackGiven, submitting, message.id, onFeedback]
@@ -38,12 +36,12 @@ export default function AssistantMessage({
     <div
       style={{
         display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
         marginBottom: "var(--spacing-lg)",
+        borderLeft: "3px solid var(--color-accent)",
+        paddingLeft: "var(--spacing-md)",
       }}
     >
-      <div style={{ maxWidth: "80%", minWidth: 0 }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
         {/* Avatar + label row */}
         <div
           style={{
@@ -55,31 +53,20 @@ export default function AssistantMessage({
         >
           <div
             style={{
-              width: 26,
-              height: 26,
-              borderRadius: "var(--radius-sm)",
-              background: "var(--color-accent-light)",
+              width: 28,
+              height: 28,
+              borderRadius: "var(--radius-full)",
+              background: "var(--color-accent)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               flexShrink: 0,
+              color: "#ffffff",
+              fontSize: "var(--font-size-xs)",
+              fontWeight: 700,
             }}
           >
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M8 1.5a4.5 4.5 0 0 0-4.5 4.5v1.5a1 1 0 0 0 1 1h1V7a2.5 2.5 0 0 1 5 0v1.5h1a1 1 0 0 0 1-1V6A4.5 4.5 0 0 0 8 1.5z"
-                fill="var(--color-accent)"
-                opacity="0.6"
-              />
-              <rect
-                x="4"
-                y="9"
-                width="8"
-                height="5"
-                rx="1.5"
-                fill="var(--color-accent)"
-              />
-            </svg>
+            A
           </div>
           <span
             style={{
@@ -88,7 +75,7 @@ export default function AssistantMessage({
               color: "var(--color-text-secondary)",
             }}
           >
-            AI Assistant
+            Assistant
           </span>
           {isStreaming && (
             <span
@@ -107,8 +94,7 @@ export default function AssistantMessage({
         <div
           style={{
             padding: "14px 18px",
-            borderRadius:
-              "var(--radius-xs) var(--radius-lg) var(--radius-lg) var(--radius-lg)",
+            borderRadius: "var(--radius-lg)",
             background: isError
               ? "var(--color-accent-light)"
               : "var(--color-bg-message-assistant)",
@@ -146,61 +132,51 @@ export default function AssistantMessage({
           <CitationPanel citations={message.citations} />
         )}
 
-        {/* Timestamp + feedback row */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "var(--spacing-md)",
-            marginTop: "var(--spacing-xs)",
-            paddingLeft: 2,
-          }}
-        >
-          <span
+        {/* Feedback row */}
+        {message.status === "complete" && !isError && (
+          <div
             style={{
-              fontSize: "var(--font-size-2xs)",
-              color: "var(--color-text-muted)",
+              display: "flex",
+              alignItems: "center",
+              gap: "var(--spacing-sm)",
+              marginTop: "var(--spacing-sm)",
+              paddingLeft: 2,
             }}
           >
-            {formatMessageTime(message.created_at)}
-          </span>
-
-          {/* Feedback buttons — only show for complete assistant messages */}
-          {message.status === "complete" && !isError && (
-            <div
+            <span
               style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 4,
+                fontSize: "var(--font-size-xs)",
+                color: "var(--color-text-muted)",
               }}
             >
-              <FeedbackButton
-                type="up"
-                active={feedbackGiven === "up"}
-                disabled={feedbackGiven !== null}
-                onClick={() => handleFeedback("up")}
-              />
-              <FeedbackButton
-                type="down"
-                active={feedbackGiven === "down"}
-                disabled={feedbackGiven !== null}
-                onClick={() => handleFeedback("down")}
-              />
-              {feedbackGiven && (
-                <span
-                  style={{
-                    fontSize: "var(--font-size-2xs)",
-                    color: "var(--color-text-muted)",
-                    marginLeft: 4,
-                    animation: "fadeIn 0.3s ease",
-                  }}
-                >
-                  Thanks!
-                </span>
-              )}
-            </div>
-          )}
-        </div>
+              Helpful?
+            </span>
+            <FeedbackButton
+              type="up"
+              active={feedbackGiven === "up"}
+              disabled={feedbackGiven !== null}
+              onClick={() => handleFeedback("up")}
+            />
+            <FeedbackButton
+              type="down"
+              active={feedbackGiven === "down"}
+              disabled={feedbackGiven !== null}
+              onClick={() => handleFeedback("down")}
+            />
+            {feedbackGiven && (
+              <span
+                style={{
+                  fontSize: "var(--font-size-2xs)",
+                  color: "var(--color-text-muted)",
+                  marginLeft: 4,
+                  animation: "fadeIn 0.3s ease",
+                }}
+              >
+                Thanks!
+              </span>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -224,23 +200,21 @@ function FeedbackButton({
       aria-label={type === "up" ? "Thumbs up" : "Thumbs down"}
       title={type === "up" ? "Helpful" : "Not helpful"}
       style={{
-        width: 24,
-        height: 24,
+        width: 26,
+        height: 26,
         borderRadius: "var(--radius-xs)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         color: active
-          ? type === "up"
-            ? "var(--color-success)"
-            : "var(--color-danger)"
+          ? "var(--color-accent-orange)"
           : "var(--color-text-muted)",
         opacity: disabled && !active ? 0.4 : 1,
         transition: "all var(--transition-fast)",
       }}
     >
       {type === "up" ? (
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path
             d="M4.5 7V14H2.5C1.95 14 1.5 13.55 1.5 13V8C1.5 7.45 1.95 7 2.5 7H4.5ZM6 7L8.5 1.5C9.33 1.5 10 2.17 10 3V5.5H13.17C13.98 5.5 14.58 6.24 14.42 7.03L13.17 13.03C13.06 13.59 12.56 14 12 14H6V7Z"
             stroke="currentColor"
@@ -251,8 +225,8 @@ function FeedbackButton({
         </svg>
       ) : (
         <svg
-          width="14"
-          height="14"
+          width="16"
+          height="16"
           viewBox="0 0 16 16"
           fill="none"
           style={{ transform: "rotate(180deg)" }}

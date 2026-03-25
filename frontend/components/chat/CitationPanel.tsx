@@ -47,19 +47,15 @@ export default function CitationPanel({ citations }: CitationPanelProps) {
           (e.currentTarget.style.background = "var(--color-bg-hover)")
         }
       >
+        {/* Book icon */}
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
           <path
-            d="M3 2h7l3 3v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"
+            d="M2 3a1 1 0 0 1 1-1h3.5a2 2 0 0 1 1.5.67A2 2 0 0 1 9.5 2H13a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9.5a1.5 1.5 0 0 0-1.5 1.5A1.5 1.5 0 0 0 6.5 13H3a1 1 0 0 1-1-1V3z"
             stroke="currentColor"
             strokeWidth="1.2"
             strokeLinejoin="round"
           />
-          <path
-            d="M5 8h6M5 11h4"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            strokeLinecap="round"
-          />
+          <path d="M8 3.5V14" stroke="currentColor" strokeWidth="1.2" />
         </svg>
         <span
           style={{

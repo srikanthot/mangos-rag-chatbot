@@ -111,8 +111,8 @@ export default function ConversationItem({
               width: "100%",
               fontSize: "var(--font-size-sm)",
               color: "var(--color-text-sidebar-bright)",
-              background: "rgba(255,255,255,0.1)",
-              border: "1px solid rgba(255,255,255,0.2)",
+              background: "var(--color-bg-sidebar-hover)",
+              border: "1px solid var(--color-border-sidebar)",
               borderRadius: "var(--radius-xs)",
               padding: "2px 6px",
               outline: "none",
@@ -170,7 +170,7 @@ export default function ConversationItem({
               transition: "all var(--transition-fast)",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(255,255,255,0.1)";
+              e.currentTarget.style.background = "var(--color-bg-sidebar-hover)";
               e.currentTarget.style.color =
                 "var(--color-text-sidebar-bright)";
             }}
@@ -208,7 +208,7 @@ export default function ConversationItem({
               transition: "all var(--transition-fast)",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(255,255,255,0.1)";
+              e.currentTarget.style.background = "var(--color-bg-sidebar-hover)";
               e.currentTarget.style.color = "#ff6b6b";
             }}
             onMouseLeave={(e) => {

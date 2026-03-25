@@ -345,6 +345,17 @@ export default function Home() {
     [activeConversation, cancelStream]
   );
 
+  // ── Refresh conversations ──────────────────────────────────────
+  const handleRefreshConversations = useCallback(async () => {
+    try {
+      const convs = await api.listConversations();
+      setConversations(convs);
+      setBackendOnline(true);
+    } catch {
+      // silent
+    }
+  }, []);
+
   // ── Starter prompt from empty state ────────────────────────────
   const handleStarterPrompt = useCallback(
     (prompt: string) => {
@@ -384,6 +395,7 @@ export default function Home() {
         onSelectConversation={handleSelectConversation}
         onDeleteConversation={handleDeleteConversation}
         onRenameConversation={handleRenameConversation}
+        onRefreshConversations={handleRefreshConversations}
         loading={loadingConversations}
         backendOnline={backendOnline}
       />
@@ -503,7 +515,7 @@ export default function Home() {
               onFeedback={handleFeedback}
             />
           ) : (
-            <EmptyState onStarterPrompt={handleStarterPrompt} />
+            <EmptyState onStarterPrompt={handleStarterPrompt} onNewChat={handleNewChat} />
           )}
         </main>
       </div>

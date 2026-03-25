@@ -12,9 +12,9 @@ export default function NewChatButton({ onClick }: NewChatButtonProps) {
         width: "100%",
         padding: "10px var(--spacing-md)",
         borderRadius: "var(--radius-md)",
-        border: "1px solid rgba(255,255,255,0.15)",
-        background: "rgba(255,255,255,0.06)",
-        color: "var(--color-text-sidebar-bright)",
+        border: "none",
+        background: "var(--color-accent)",
+        color: "#ffffff",
         fontWeight: 600,
         fontSize: "var(--font-size-sm)",
         transition: "all var(--transition-fast)",
@@ -25,12 +25,10 @@ export default function NewChatButton({ onClick }: NewChatButtonProps) {
         gap: "var(--spacing-sm)",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.background = "rgba(255,255,255,0.12)";
-        e.currentTarget.style.borderColor = "rgba(255,255,255,0.25)";
+        e.currentTarget.style.background = "var(--color-accent-hover)";
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.background = "rgba(255,255,255,0.06)";
-        e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)";
+        e.currentTarget.style.background = "var(--color-accent)";
       }}
     >
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none">

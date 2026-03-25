@@ -82,7 +82,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
             placeholder={
               disabled
                 ? "Waiting for response..."
-                : "Ask a question about technical manuals..."
+                : "Ask a question about the PSEG Tech Manual..."
             }
             disabled={disabled}
             rows={1}
@@ -107,7 +107,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
               height: 38,
               borderRadius: "var(--radius-lg)",
               background: canSend
-                ? "var(--color-accent)"
+                ? "var(--color-accent-orange)"
                 : "var(--color-bg-hover)",
               display: "flex",
               alignItems: "center",
@@ -123,19 +123,18 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
               fill="none"
               style={{
                 color: canSend
-                  ? "var(--color-text-inverse)"
+                  ? "#ffffff"
                   : "var(--color-text-muted)",
-                transform: "rotate(-45deg)",
                 transition: "color var(--transition-fast)",
               }}
             >
               <path
-                d="M3 9l6-6m0 0l6 6m-6-6v12"
+                d="M9 15V3m0 0l-5 5m5-5l5 5"
                 stroke="currentColor"
-                strokeWidth="1.8"
+                strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                transform="rotate(45 9 9)"
+                transform="rotate(90 9 9)"
               />
             </svg>
           </button>
@@ -157,8 +156,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
               textAlign: "center",
             }}
           >
-            AI may produce inaccurate information. Verify critical details
-            with source documents.
+            Shift+Enter for new line &middot; Responses are AI-generated &mdash; always verify critical information.
           </div>
           {showCharCount && (
             <div

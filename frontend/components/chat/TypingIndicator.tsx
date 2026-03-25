@@ -5,12 +5,13 @@ export default function TypingIndicator() {
     <div
       style={{
         display: "flex",
-        alignItems: "flex-start",
         marginBottom: "var(--spacing-lg)",
+        borderLeft: "3px solid var(--color-accent)",
+        paddingLeft: "var(--spacing-md)",
         animation: "fadeIn 0.3s ease",
       }}
     >
-      <div style={{ maxWidth: "80%" }}>
+      <div style={{ flex: 1 }}>
         {/* Avatar + label */}
         <div
           style={{
@@ -22,25 +23,19 @@ export default function TypingIndicator() {
         >
           <div
             style={{
-              width: 26,
-              height: 26,
-              borderRadius: "var(--radius-sm)",
-              background: "var(--color-accent-light)",
+              width: 28,
+              height: 28,
+              borderRadius: "var(--radius-full)",
+              background: "var(--color-accent)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              color: "#ffffff",
+              fontSize: "var(--font-size-xs)",
+              fontWeight: 700,
             }}
           >
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <rect
-                x="4"
-                y="9"
-                width="8"
-                height="5"
-                rx="1.5"
-                fill="var(--color-accent)"
-              />
-            </svg>
+            A
           </div>
           <span
             style={{
@@ -49,14 +44,14 @@ export default function TypingIndicator() {
               color: "var(--color-text-secondary)",
             }}
           >
-            AI Assistant
+            Assistant
           </span>
         </div>
 
         <div
           style={{
             padding: "14px 18px",
-            borderRadius: "var(--radius-xs) var(--radius-lg) var(--radius-lg) var(--radius-lg)",
+            borderRadius: "var(--radius-lg)",
             background: "var(--color-bg-message-assistant)",
             border: "1px solid var(--color-border-light)",
             display: "flex",
