@@ -1,0 +1,43 @@
+export function formatTimestamp(iso: string): string {
+  const date = new Date(iso);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMin = Math.floor(diffMs / 60000);
+
+  if (diffMin < 1) return "Just now";
+  if (diffMin < 60) return `${diffMin}m ago`;
+  const diffHr = Math.floor(diffMin / 60);
+  if (diffHr < 24) return `${diffHr}h ago`;
+  const diffDay = Math.floor(diffHr / 24);
+  if (diffDay === 1) return "Yesterday";
+  if (diffDay < 7) return `${diffDay}d ago`;
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+export function formatMessageTime(iso: string): string {
+  return new Date(iso).toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
+export function truncate(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength - 1) + "\u2026";
+}
+
+export function generateId(): string {
+  return crypto.randomUUID();
+}
+
+/** Get or create a debug user ID for local dev without Entra auth */
+export function getDebugUserId(): string {
+  if (typeof window === "undefined") return "anonymous";
+  let id = localStorage.getItem("debug_user_id");
+  if (!id) {
+    id = `dev-${crypto.randomUUID().slice(0, 8)}`;
+    localStorage.setItem("debug_user_id", id);
+  }
+  return id;
+}
