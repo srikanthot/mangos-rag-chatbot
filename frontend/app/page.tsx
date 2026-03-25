@@ -384,7 +384,14 @@ export default function Home() {
   );
 
   return (
-    <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+    <div
+      style={{
+        display: "flex",
+        height: "100vh",
+        overflow: "hidden",
+        background: "var(--color-bg-sidebar)",
+      }}
+    >
       <Sidebar
         open={sidebarOpen}
         theme={theme}
@@ -405,6 +412,11 @@ export default function Home() {
           display: "flex",
           flexDirection: "column",
           minWidth: 0,
+          background: "var(--color-bg-primary)",
+          borderRadius: 14,
+          margin: "8px 8px 8px 0",
+          overflow: "hidden",
+          boxShadow: "var(--shadow-sm)",
         }}
       >
         <Header

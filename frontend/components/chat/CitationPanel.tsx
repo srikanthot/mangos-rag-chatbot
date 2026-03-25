@@ -15,9 +15,9 @@ export default function CitationPanel({ citations }: CitationPanelProps) {
   return (
     <div
       style={{
-        marginTop: "var(--spacing-sm)",
-        borderRadius: "var(--radius-md)",
-        border: "1px solid var(--color-border-light)",
+        marginTop: 8,
+        borderRadius: 8,
+        border: "1px solid var(--color-border)",
         background: "var(--color-bg-citation)",
         overflow: "hidden",
       }}
@@ -29,14 +29,14 @@ export default function CitationPanel({ citations }: CitationPanelProps) {
         aria-label={`${collapsed ? "Show" : "Hide"} ${citations.length} sources`}
         style={{
           width: "100%",
-          padding: "8px 14px",
-          background: "var(--color-bg-hover)",
+          padding: "8px 12px",
+          background: "var(--color-bg-suggestion)",
           borderBottom: collapsed
             ? "none"
-            : "1px solid var(--color-border-light)",
+            : "1px solid var(--color-border)",
           display: "flex",
           alignItems: "center",
-          gap: "var(--spacing-sm)",
+          gap: 8,
           cursor: "pointer",
           transition: "background var(--transition-fast)",
         }}
@@ -44,7 +44,7 @@ export default function CitationPanel({ citations }: CitationPanelProps) {
           (e.currentTarget.style.background = "var(--color-bg-active)")
         }
         onMouseLeave={(e) =>
-          (e.currentTarget.style.background = "var(--color-bg-hover)")
+          (e.currentTarget.style.background = "var(--color-bg-suggestion)")
         }
       >
         {/* Book icon */}
@@ -91,7 +91,7 @@ export default function CitationPanel({ citations }: CitationPanelProps) {
 
       {/* Citation items */}
       {!collapsed && (
-        <div style={{ padding: "6px" }}>
+        <div style={{ padding: 6 }}>
           {citations.map((c, idx) => {
             const displayTitle = c.title || c.source || "Untitled Document";
             const hasUrl = Boolean(c.url);
@@ -103,12 +103,12 @@ export default function CitationPanel({ citations }: CitationPanelProps) {
               <div
                 key={c.chunk_id || `${c.source}-${idx}`}
                 style={{
-                  padding: "10px 12px",
+                  padding: "8px 10px",
                   borderRadius: "var(--radius-sm)",
                   display: "flex",
                   alignItems: "flex-start",
                   justifyContent: "space-between",
-                  gap: "var(--spacing-md)",
+                  gap: 12,
                   borderBottom:
                     idx < citations.length - 1
                       ? "1px solid var(--color-border-light)"
@@ -135,7 +135,6 @@ export default function CitationPanel({ citations }: CitationPanelProps) {
                       style={{
                         fontSize: "var(--font-size-xs)",
                         color: "var(--color-text-muted)",
-                        marginBottom: 2,
                       }}
                     >
                       {sectionText}
@@ -149,7 +148,7 @@ export default function CitationPanel({ citations }: CitationPanelProps) {
                     rel="noopener noreferrer"
                     aria-label={`Open PDF: ${displayTitle}`}
                     style={{
-                      padding: "5px 10px",
+                      padding: "4px 10px",
                       borderRadius: "var(--radius-sm)",
                       border: "1px solid var(--color-border)",
                       background: "var(--color-bg-secondary)",
@@ -185,7 +184,7 @@ export default function CitationPanel({ citations }: CitationPanelProps) {
                   <span
                     aria-label="No link available"
                     style={{
-                      padding: "5px 10px",
+                      padding: "4px 10px",
                       borderRadius: "var(--radius-sm)",
                       border: "1px solid var(--color-border-light)",
                       fontSize: "var(--font-size-2xs)",

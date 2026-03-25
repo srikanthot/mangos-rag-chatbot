@@ -10,14 +10,14 @@ export default function NewChatButton({ onClick }: NewChatButtonProps) {
       onClick={onClick}
       style={{
         width: "100%",
-        padding: "10px var(--spacing-md)",
+        padding: "9px var(--spacing-md)",
         borderRadius: "var(--radius-md)",
         border: "none",
         background: "var(--color-accent)",
         color: "#ffffff",
         fontWeight: 600,
         fontSize: "var(--font-size-sm)",
-        transition: "all var(--transition-fast)",
+        transition: "background var(--transition-fast)",
         textAlign: "center",
         display: "flex",
         alignItems: "center",
@@ -31,7 +31,7 @@ export default function NewChatButton({ onClick }: NewChatButtonProps) {
         e.currentTarget.style.background = "var(--color-accent)";
       }}
     >
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
         <path
           d="M8 3v10M3 8h10"
           stroke="currentColor"

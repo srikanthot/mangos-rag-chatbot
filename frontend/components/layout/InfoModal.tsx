@@ -16,14 +16,39 @@ const TABS: { id: TabId; label: string }[] = [
   { id: "whats-new", label: "What's New" },
 ];
 
+const RELEASES = [
+  {
+    version: "v2.0",
+    date: "March 2026",
+    badge: "Current Release",
+    badgeColor: "#16a34a",
+    items: [
+      "Redesigned interface with PSEG branding and modern layout",
+      "Real-time streaming responses with typing indicators",
+      "Conversation history with rename and delete",
+      "Collapsible source citation panel with PDF links",
+      "Thumbs up/down feedback on each response",
+      "Dark mode with neutral gray theme",
+      "Floating sidebar with smooth collapse animation",
+    ],
+  },
+  {
+    version: "v1.0",
+    date: "March 2026",
+    badge: "Initial Release",
+    badgeColor: "#6b7280",
+    items: [
+      "Basic chat functionality with document search",
+      "Hybrid vector + keyword retrieval",
+      "Source citation support",
+      "Session-based conversation tracking",
+    ],
+  },
+];
+
 const FEATURES = [
   {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <circle cx="9" cy="9" r="6" stroke="#d97706" strokeWidth="1.5" />
-        <path d="M13.5 13.5L17 17" stroke="#d97706" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
+    emoji: "\uD83D\uDD0D",
     bgColor: "#fef3c7",
     borderColor: "#f59e0b",
     title: "Document Search",
@@ -31,17 +56,7 @@ const FEATURES = [
       "Searches across indexed PSEG technical manuals using hybrid vector + keyword retrieval.",
   },
   {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path
-          d="M5 2h7l4 4v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"
-          stroke="#ea580c"
-          strokeWidth="1.5"
-          strokeLinejoin="round"
-        />
-        <path d="M7 10h6M7 13h4" stroke="#ea580c" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
+    emoji: "\uD83D\uDCCB",
     bgColor: "#ffedd5",
     borderColor: "#f26522",
     title: "Source Citations",
@@ -49,16 +64,7 @@ const FEATURES = [
       "Every answer includes clickable PDF citations showing the exact document, section, and page.",
   },
   {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path
-          d="M10 2C5.58 2 2 5.36 2 9.5c0 2.3 1.12 4.35 2.88 5.7V18l3.14-1.72c.62.2 1.28.32 1.98.32 4.42 0 8-3.36 8-7.5S14.42 2 10 2z"
-          stroke="#9333ea"
-          strokeWidth="1.5"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
+    emoji: "\uD83D\uDCAC",
     bgColor: "#f3e8ff",
     borderColor: "#9333ea",
     title: "Conversation History",
@@ -66,18 +72,7 @@ const FEATURES = [
       "All chat sessions are persisted and can be resumed at any time from the sidebar.",
   },
   {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path
-          d="M3 10a7 7 0 0 1 13.15-3.36M17 10a7 7 0 0 1-13.15 3.36"
-          stroke="#2563eb"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-        <path d="M16.15 3v3.64h-3.64" stroke="#2563eb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M3.85 17v-3.64h3.64" stroke="#2563eb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
+    emoji: "\uD83D\uDD04",
     bgColor: "#dbeafe",
     borderColor: "#2563eb",
     title: "Follow-up Context",
@@ -85,18 +80,7 @@ const FEATURES = [
       "Ask follow-up questions \u2014 the assistant remembers the conversation context.",
   },
   {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path
-          d="M6 9V16H4a1 1 0 0 1-1-1V10a1 1 0 0 1 1-1h2zM8 9l3-6c1 0 2 .8 2 2v3h4a1.5 1.5 0 0 1 1.4 2l-1.5 7a1 1 0 0 1-1 .8H8V9z"
-          stroke="#d97706"
-          strokeWidth="1.3"
-          strokeLinejoin="round"
-          fill="#fbbf24"
-          opacity="0.35"
-        />
-      </svg>
-    ),
+    emoji: "\uD83D\uDD25",
     bgColor: "#fef9c3",
     borderColor: "#f59e0b",
     title: "Answer Feedback",
@@ -147,14 +131,14 @@ export default function InfoModal({ open, onClose }: InfoModalProps) {
         onClick={(e) => e.stopPropagation()}
         style={{
           background: "var(--color-bg-secondary)",
-          borderRadius: "var(--radius-xl)",
-          maxWidth: 580,
+          borderRadius: "var(--radius-lg)",
+          maxWidth: 560,
           width: "92%",
           maxHeight: "80vh",
           display: "flex",
           flexDirection: "column",
-          boxShadow: "var(--shadow-xl)",
-          animation: "scaleIn 0.25s ease",
+          boxShadow: "var(--shadow-2xl)",
+          animation: "scaleIn 0.2s ease",
           overflow: "hidden",
         }}
       >
@@ -164,11 +148,11 @@ export default function InfoModal({ open, onClose }: InfoModalProps) {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            padding: "20px 24px 0",
+            padding: "18px 20px 0",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
               <circle
                 cx="10"
                 cy="10"
@@ -185,7 +169,7 @@ export default function InfoModal({ open, onClose }: InfoModalProps) {
             </svg>
             <h2
               style={{
-                fontSize: "var(--font-size-xl)",
+                fontSize: "var(--font-size-lg)",
                 fontWeight: 700,
               }}
             >
@@ -229,8 +213,8 @@ export default function InfoModal({ open, onClose }: InfoModalProps) {
           style={{
             display: "flex",
             gap: 0,
-            padding: "16px 24px 0",
-            borderBottom: "1px solid var(--color-border-light)",
+            padding: "14px 20px 0",
+            borderBottom: "1px solid var(--color-border)",
           }}
         >
           {TABS.map((tab) => (
@@ -240,13 +224,13 @@ export default function InfoModal({ open, onClose }: InfoModalProps) {
               aria-selected={activeTab === tab.id}
               onClick={() => setActiveTab(tab.id)}
               style={{
-                padding: "8px 16px 12px",
+                padding: "8px 14px 10px",
                 fontSize: "var(--font-size-sm)",
                 fontWeight: activeTab === tab.id ? 600 : 400,
                 color:
                   activeTab === tab.id
                     ? "var(--color-accent)"
-                    : "var(--color-text-secondary)",
+                    : "var(--color-text-muted)",
                 borderBottom:
                   activeTab === tab.id
                     ? "2px solid var(--color-accent)"
@@ -264,10 +248,10 @@ export default function InfoModal({ open, onClose }: InfoModalProps) {
         <div
           role="tabpanel"
           style={{
-            padding: "20px 24px 0",
+            padding: "16px 20px 0",
             overflowY: "auto",
             fontSize: "var(--font-size-sm)",
-            lineHeight: 1.7,
+            lineHeight: 1.625,
             color: "var(--color-text-secondary)",
             flex: 1,
           }}
@@ -378,7 +362,7 @@ export default function InfoModal({ open, onClose }: InfoModalProps) {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "var(--spacing-sm)",
+                gap: 8,
               }}
             >
               {FEATURES.map((feature) => (
@@ -386,40 +370,62 @@ export default function InfoModal({ open, onClose }: InfoModalProps) {
                   key={feature.title}
                   style={{
                     padding: "14px 16px",
-                    borderRadius: "var(--radius-md)",
-                    border: "1px solid var(--color-border-light)",
-                    borderLeft: `3px solid ${feature.borderColor}`,
-                    background: "var(--color-bg-primary)",
+                    borderRadius: 10,
+                    border: "1px solid var(--color-border)",
+                    borderLeft: `4px solid ${feature.borderColor}`,
+                    background: "var(--color-bg-secondary)",
                     display: "flex",
                     alignItems: "flex-start",
-                    gap: "var(--spacing-md)",
+                    gap: 14,
+                    transition: "all 150ms ease",
+                    cursor: "default",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = feature.borderColor;
+                    e.currentTarget.style.boxShadow = `0 2px 12px ${feature.borderColor}18`;
+                    e.currentTarget.style.transform = "translateX(2px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "var(--color-border)";
+                    e.currentTarget.style.borderLeftColor = feature.borderColor;
+                    e.currentTarget.style.boxShadow = "none";
+                    e.currentTarget.style.transform = "translateX(0)";
                   }}
                 >
                   <div
                     style={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: "var(--radius-md)",
+                      width: 38,
+                      height: 38,
+                      borderRadius: 10,
                       background: feature.bgColor,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       flexShrink: 0,
+                      fontSize: "1.2rem",
+                      boxShadow: `0 2px 6px ${feature.borderColor}15`,
                     }}
                   >
-                    {feature.icon}
+                    {feature.emoji}
                   </div>
-                  <div>
+                  <div style={{ paddingTop: 2 }}>
                     <div
                       style={{
                         fontWeight: 600,
                         color: "var(--color-text-primary)",
-                        marginBottom: 2,
+                        marginBottom: 3,
+                        fontSize: "0.9rem",
                       }}
                     >
                       {feature.title}
                     </div>
-                    <div style={{ fontSize: "var(--font-size-sm)" }}>
+                    <div
+                      style={{
+                        fontSize: "var(--font-size-sm)",
+                        lineHeight: 1.5,
+                        color: "var(--color-text-secondary)",
+                      }}
+                    >
                       {feature.description}
                     </div>
                   </div>
@@ -429,16 +435,67 @@ export default function InfoModal({ open, onClose }: InfoModalProps) {
           )}
 
           {activeTab === "whats-new" && (
-            <div>
-              <Section title="v2.0 \u2014 Current Release">
-                Redesigned interface with improved chat experience, PSEG branding,
-                conversation management, streaming responses, citation panel,
-                feedback system, dark mode support, and enhanced performance.
-              </Section>
-              <Section title="v1.0.0">
-                Initial release with basic chat functionality, document search,
-                and citation support.
-              </Section>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              {RELEASES.map((release, ri) => (
+                <div
+                  key={release.version}
+                  style={{
+                    borderRadius: 10,
+                    border: "1px solid var(--color-border)",
+                    background: "var(--color-bg-secondary)",
+                    overflow: "hidden",
+                  }}
+                >
+                  {/* Version header */}
+                  <div
+                    style={{
+                      padding: "12px 16px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 10,
+                      borderBottom: "1px solid var(--color-border)",
+                      background: ri === 0 ? "var(--color-accent-light)" : "transparent",
+                    }}
+                  >
+                    <span style={{ fontWeight: 700, fontSize: "1rem", color: "var(--color-text-primary)" }}>
+                      {release.version}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: "0.68rem",
+                        fontWeight: 600,
+                        padding: "2px 8px",
+                        borderRadius: 9999,
+                        background: release.badgeColor,
+                        color: "#ffffff",
+                        letterSpacing: "0.02em",
+                      }}
+                    >
+                      {release.badge}
+                    </span>
+                    <span style={{ marginLeft: "auto", fontSize: "0.75rem", color: "var(--color-text-muted)" }}>
+                      {release.date}
+                    </span>
+                  </div>
+                  {/* Items */}
+                  <ul
+                    style={{
+                      padding: "10px 16px 12px 32px",
+                      margin: 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 4,
+                      fontSize: "0.82rem",
+                      lineHeight: 1.55,
+                      color: "var(--color-text-secondary)",
+                    }}
+                  >
+                    {release.items.map((item, ii) => (
+                      <li key={ii}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -446,8 +503,8 @@ export default function InfoModal({ open, onClose }: InfoModalProps) {
         {/* Footer */}
         <div
           style={{
-            padding: "14px 24px",
-            borderTop: "1px solid var(--color-border-light)",
+            padding: "12px 20px",
+            borderTop: "1px solid var(--color-border)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -472,21 +529,20 @@ export default function InfoModal({ open, onClose }: InfoModalProps) {
               gap: 6,
               padding: "7px 16px",
               borderRadius: "var(--radius-md)",
-              border: "1px solid var(--color-accent-orange)",
-              background: "transparent",
-              color: "var(--color-accent-orange)",
+              border: "none",
+              background: "var(--color-accent-orange)",
+              color: "#ffffff",
               fontWeight: 600,
               fontSize: "var(--font-size-sm)",
               textDecoration: "none",
               transition: "all var(--transition-fast)",
+              boxShadow: "0 2px 8px rgba(242, 101, 34, 0.3)",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "var(--color-accent-orange)";
-              e.currentTarget.style.color = "#ffffff";
+              e.currentTarget.style.background = "var(--color-accent-orange-hover)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = "transparent";
-              e.currentTarget.style.color = "var(--color-accent-orange)";
+              e.currentTarget.style.background = "var(--color-accent-orange)";
             }}
           >
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -501,30 +557,6 @@ export default function InfoModal({ open, onClose }: InfoModalProps) {
           </a>
         </div>
       </div>
-    </div>
-  );
-}
-
-function Section({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div style={{ marginBottom: "var(--spacing-lg)" }}>
-      <h3
-        style={{
-          fontSize: "var(--font-size-sm)",
-          fontWeight: 600,
-          color: "var(--color-text-primary)",
-          marginBottom: "var(--spacing-xs)",
-        }}
-      >
-        {title}
-      </h3>
-      <p>{children}</p>
     </div>
   );
 }

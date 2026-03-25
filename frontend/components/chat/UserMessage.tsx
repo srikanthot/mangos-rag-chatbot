@@ -12,8 +12,7 @@ export default function UserMessage({ message }: UserMessageProps) {
       style={{
         display: "flex",
         marginBottom: "var(--spacing-lg)",
-        borderLeft: "3px solid var(--color-accent)",
-        paddingLeft: "var(--spacing-md)",
+        paddingLeft: 0,
       }}
     >
       <div style={{ flex: 1, minWidth: 0 }}>
@@ -23,7 +22,7 @@ export default function UserMessage({ message }: UserMessageProps) {
             display: "flex",
             alignItems: "center",
             gap: "var(--spacing-sm)",
-            marginBottom: "var(--spacing-xs)",
+            marginBottom: 6,
           }}
         >
           <div
@@ -31,7 +30,7 @@ export default function UserMessage({ message }: UserMessageProps) {
               width: 28,
               height: 28,
               borderRadius: "var(--radius-full)",
-              background: "var(--color-accent)",
+              background: "var(--color-accent-user)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -54,18 +53,19 @@ export default function UserMessage({ message }: UserMessageProps) {
           </span>
         </div>
 
-        {/* Message bubble */}
+        {/* Message bubble — light blue gradient matching reference app */}
         <div
           style={{
-            padding: "12px 16px",
-            borderRadius: "var(--radius-lg)",
+            padding: "0.85rem 1.25rem",
+            borderRadius: 12,
             background: "var(--color-bg-message-user)",
-            color: "var(--color-text-inverse)",
-            fontSize: "var(--font-size-base)",
-            lineHeight: 1.6,
+            border: "1px solid var(--color-border-message-user)",
+            borderLeft: "4px solid var(--color-accent-user)",
+            color: "var(--color-text-primary)",
+            fontSize: "var(--font-size-sm)",
+            lineHeight: 1.625,
             whiteSpace: "pre-wrap",
             wordBreak: "break-word",
-            boxShadow: "var(--shadow-sm)",
           }}
         >
           {message.content}

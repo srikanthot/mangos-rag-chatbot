@@ -15,12 +15,14 @@ export default function ThemeToggle({ theme, onToggle }: ThemeToggleProps) {
       style={{
         display: "flex",
         alignItems: "center",
+        justifyContent: "center",
         gap: "var(--spacing-sm)",
         padding: "8px 12px",
         borderRadius: "var(--radius-md)",
+        border: "1px solid var(--color-border-sidebar)",
         color: "var(--color-text-sidebar)",
         fontSize: "var(--font-size-sm)",
-        transition: "background var(--transition-fast)",
+        transition: "all var(--transition-fast)",
         width: "100%",
       }}
       onMouseEnter={(e) =>

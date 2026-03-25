@@ -84,7 +84,7 @@ export default function ConversationItem({
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "10px 12px",
+        padding: "8px 10px",
         borderRadius: "var(--radius-md)",
         background: isActive
           ? "var(--color-bg-sidebar-active)"

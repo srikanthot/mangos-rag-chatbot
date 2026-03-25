@@ -43,9 +43,9 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
   return (
     <div
       style={{
-        padding: "12px var(--spacing-lg) 16px",
+        padding: "12px var(--spacing-md) 14px",
         background: "var(--color-bg-primary)",
-        borderTop: "1px solid var(--color-border-light)",
+        borderTop: "1px solid var(--color-border)",
         flexShrink: 0,
       }}
     >
@@ -60,12 +60,11 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
           style={{
             display: "flex",
             alignItems: "flex-end",
-            gap: "var(--spacing-sm)",
+            gap: 8,
             background: "var(--color-bg-input)",
-            border: "1px solid var(--color-border)",
-            borderRadius: "var(--radius-xl)",
-            padding: "8px 8px 8px 18px",
-            boxShadow: "var(--shadow-sm)",
+            border: "2px solid var(--color-border)",
+            borderRadius: 12,
+            padding: "8px 8px 8px 16px",
             transition:
               "border-color var(--transition-fast), box-shadow var(--transition-fast)",
           }}
@@ -91,7 +90,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
               flex: 1,
               resize: "none",
               background: "transparent",
-              fontSize: "var(--font-size-base)",
+              fontSize: "var(--font-size-sm)",
               lineHeight: 1.5,
               minHeight: 24,
               maxHeight: 140,
@@ -103,9 +102,9 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
             disabled={!canSend}
             aria-label="Send message"
             style={{
-              width: 38,
-              height: 38,
-              borderRadius: "var(--radius-lg)",
+              width: 36,
+              height: 36,
+              borderRadius: "var(--radius-md)",
               background: canSend
                 ? "var(--color-accent-orange)"
                 : "var(--color-bg-hover)",
@@ -134,7 +133,6 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                transform="rotate(90 9 9)"
               />
             </svg>
           </button>
@@ -144,7 +142,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginTop: "var(--spacing-sm)",
+            marginTop: 6,
             padding: "0 4px",
           }}
         >

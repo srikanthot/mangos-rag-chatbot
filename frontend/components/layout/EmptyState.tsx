@@ -16,58 +16,54 @@ export default function EmptyState({ onStarterPrompt, onNewChat }: EmptyStatePro
         alignItems: "center",
         justifyContent: "center",
         height: "100%",
-        padding: "var(--spacing-2xl) var(--spacing-lg)",
+        padding: "2rem 2rem 3rem",
         textAlign: "center",
         position: "relative",
         zIndex: 1,
         animation: "fadeIn 0.4s ease",
       }}
     >
-      {/* Chat bubble icon */}
+      {/* Styled chat bubble icon */}
       <div
         style={{
-          width: 72,
-          height: 72,
-          borderRadius: "var(--radius-xl)",
-          background: "linear-gradient(135deg, #e8e0f0 0%, #d4c8e8 100%)",
+          width: 56,
+          height: 56,
+          borderRadius: 16,
+          background: "linear-gradient(135deg, #818cf8, #a78bfa)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginBottom: "var(--spacing-lg)",
+          marginBottom: "1rem",
+          boxShadow: "0 6px 20px rgba(129, 140, 248, 0.3)",
         }}
       >
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
           <path
-            d="M12 2C6.477 2 2 6.015 2 10.95c0 2.73 1.34 5.17 3.45 6.78V22l3.76-2.06c.88.24 1.82.37 2.79.37 5.523 0 10-4.015 10-8.95S17.523 2 12 2z"
-            fill="#9b8ab8"
-            opacity="0.3"
-          />
-          <path
-            d="M12 2C6.477 2 2 6.015 2 10.95c0 2.73 1.34 5.17 3.45 6.78V22l3.76-2.06c.88.24 1.82.37 2.79.37 5.523 0 10-4.015 10-8.95S17.523 2 12 2z"
-            stroke="#8b7aab"
-            strokeWidth="1.5"
-            strokeLinejoin="round"
+            d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
+            fill="rgba(255,255,255,0.92)"
+            stroke="rgba(255,255,255,1)"
+            strokeWidth="0.5"
           />
         </svg>
       </div>
 
       <h1
         style={{
-          fontSize: "var(--font-size-2xl)",
+          fontSize: "1.35rem",
           fontWeight: 700,
           color: "var(--color-text-primary)",
-          marginBottom: "var(--spacing-sm)",
+          marginBottom: "0.4rem",
         }}
       >
         Start a conversation
       </h1>
       <p
         style={{
-          fontSize: "var(--font-size-base)",
-          color: "var(--color-text-secondary)",
-          maxWidth: 520,
-          lineHeight: 1.6,
-          marginBottom: "var(--spacing-xl)",
+          fontSize: "0.875rem",
+          color: "var(--color-text-muted)",
+          maxWidth: 440,
+          lineHeight: 1.65,
+          marginBottom: "1.75rem",
         }}
       >
         Ask questions about PSEG technical manuals. Answers are grounded in
@@ -81,20 +77,29 @@ export default function EmptyState({ onStarterPrompt, onNewChat }: EmptyStatePro
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: "var(--spacing-sm)",
-          padding: "12px 28px",
-          borderRadius: "var(--radius-md)",
-          background: "var(--color-text-primary)",
-          color: "var(--color-text-inverse)",
+          gap: 8,
+          padding: "10px 28px",
+          borderRadius: 8,
+          background: "#1e3a5f",
+          color: "#ffffff",
           fontWeight: 600,
-          fontSize: "var(--font-size-base)",
-          marginBottom: "var(--spacing-xl)",
-          transition: "opacity var(--transition-fast)",
+          fontSize: "0.875rem",
+          marginBottom: "2rem",
+          transition: "all 150ms ease",
+          border: "none",
+          boxShadow: "0 2px 8px rgba(30, 58, 95, 0.25)",
+          cursor: "pointer",
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
-        onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = "#142942";
+          e.currentTarget.style.boxShadow = "0 4px 12px rgba(30, 58, 95, 0.35)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = "#1e3a5f";
+          e.currentTarget.style.boxShadow = "0 2px 8px rgba(30, 58, 95, 0.25)";
+        }}
       >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
           <path
             d="M8 3v10M3 8h10"
             stroke="currentColor"
@@ -108,24 +113,24 @@ export default function EmptyState({ onStarterPrompt, onNewChat }: EmptyStatePro
       {/* TRY ASKING label */}
       <div
         style={{
-          fontSize: "var(--font-size-2xs)",
+          fontSize: "0.625rem",
           fontWeight: 600,
           color: "var(--color-text-muted)",
           textTransform: "uppercase",
-          letterSpacing: "0.1em",
-          marginBottom: "var(--spacing-md)",
+          letterSpacing: "0.08em",
+          marginBottom: 10,
         }}
       >
         Try Asking
       </div>
 
-      {/* Starter prompts — single column, full width */}
+      {/* Starter prompts */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "var(--spacing-sm)",
-          maxWidth: 560,
+          gap: 8,
+          maxWidth: 480,
           width: "100%",
         }}
       >
@@ -135,22 +140,27 @@ export default function EmptyState({ onStarterPrompt, onNewChat }: EmptyStatePro
             onClick={() => onStarterPrompt(item.prompt)}
             style={{
               textAlign: "left",
-              padding: "14px var(--spacing-md)",
-              borderRadius: "var(--radius-md)",
+              padding: "11px 16px",
+              borderRadius: 8,
               background: "var(--color-bg-secondary)",
               border: "1px solid var(--color-border)",
-              fontSize: "var(--font-size-sm)",
+              fontSize: "0.875rem",
               color: "var(--color-text-primary)",
-              transition: "all var(--transition-fast)",
-              animation: `slideUp 0.35s ease ${i * 0.06}s both`,
+              transition: "all 150ms ease",
+              animation: `slideUp 0.3s ease ${i * 0.05}s both`,
+              cursor: "pointer",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "var(--color-bg-suggestion)";
+              e.currentTarget.style.background = "var(--color-bg-suggestion-hover)";
               e.currentTarget.style.borderColor = "var(--color-accent)";
+              e.currentTarget.style.transform = "translateY(-1px)";
+              e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.06)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = "var(--color-bg-secondary)";
               e.currentTarget.style.borderColor = "var(--color-border)";
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
             }}
           >
             {item.prompt}
@@ -161,9 +171,10 @@ export default function EmptyState({ onStarterPrompt, onNewChat }: EmptyStatePro
       {/* Footer text */}
       <p
         style={{
-          fontSize: "var(--font-size-xs)",
+          fontSize: "0.72rem",
           color: "var(--color-text-muted)",
-          marginTop: "var(--spacing-xl)",
+          marginTop: "1.5rem",
+          opacity: 0.7,
         }}
       >
         Previous conversations are saved and available in the sidebar.

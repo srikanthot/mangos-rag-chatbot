@@ -1,20 +1,23 @@
 :root {
-  /* Colors - Light (matched to production palette) */
+  /* Colors - Light (exact production palette) */
   --color-bg-primary: #f7f9fc;
   --color-bg-secondary: #ffffff;
   --color-bg-sidebar: #ffffff;
   --color-bg-sidebar-hover: #f1f5f9;
   --color-bg-sidebar-active: #e2e8f0;
-  --color-bg-hover: #edf2f7;
+  --color-bg-hover: #f1f5f9;
   --color-bg-active: #e2e8f0;
   --color-bg-input: #ffffff;
-  --color-bg-message-user: #1e3a5f;
+  --color-bg-message-user: linear-gradient(135deg, #eef4fb, #e3ecf7);
+  --color-bg-message-user-solid: #eef4fb;
+  --color-border-message-user: #d0dff0;
+  --color-accent-user: #4a90d9;
   --color-bg-message-assistant: #ffffff;
   --color-bg-card: #ffffff;
-  --color-bg-suggestion: #f1f5f9;
-  --color-bg-suggestion-hover: #e2e8f0;
-  --color-bg-citation: #f7f9fc;
-  --color-bg-modal-overlay: rgba(0, 0, 0, 0.5);
+  --color-bg-suggestion: #f8fafc;
+  --color-bg-suggestion-hover: #f1f5f9;
+  --color-bg-citation: #fafbfd;
+  --color-bg-modal-overlay: rgba(0, 0, 0, 0.4);
 
   --color-text-primary: #2d3748;
   --color-text-secondary: #4a5568;
@@ -30,14 +33,14 @@
   --color-border-sidebar: #e2e8f0;
   --color-accent: #1e3a5f;
   --color-accent-hover: #142942;
-  --color-accent-light: #ebf4ff;
+  --color-accent-light: #eff6ff;
   --color-accent-orange: #f26522;
   --color-accent-orange-hover: #d9551a;
   --color-bg-header-active: #1e3a5f;
-  --color-danger: #d32f2f;
-  --color-success: #2e7d32;
-  --color-success-light: #e8f5e9;
-  --color-warning: #f59e0b;
+  --color-danger: #dc2626;
+  --color-success: #16a34a;
+  --color-success-light: #f0fdf4;
+  --color-warning: #eab308;
 
   /* Spacing */
   --spacing-xs: 4px;
@@ -48,86 +51,111 @@
   --spacing-2xl: 48px;
   --spacing-3xl: 64px;
 
-  /* Border radius */
+  /* Border radius — matched to production (Tailwind defaults) */
   --radius-xs: 4px;
   --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 12px;
   --radius-full: 9999px;
 
-  /* Typography */
-  --font-sans: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "Cascadia Code", "SF Mono", "Fira Code", "Fira Mono", monospace;
-  --font-size-2xs: 0.6875rem;
+  /* Typography — Inter first, matching production */
+  --font-sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-size-2xs: 0.625rem;
   --font-size-xs: 0.75rem;
-  --font-size-sm: 0.8125rem;
-  --font-size-base: 0.9375rem;
-  --font-size-lg: 1.0625rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 0.875rem;
+  --font-size-lg: 1.125rem;
   --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.75rem;
-  --font-size-3xl: 2rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
 
-  /* Shadows */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.14);
+  /* Shadows — exact Tailwind defaults */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 
   /* Layout */
-  --sidebar-width: 280px;
-  --header-height: 60px;
-  --chat-max-width: 820px;
+  --sidebar-width: 300px;
+  --header-height: 56px;
+  --chat-max-width: 900px;
 
-  /* Transitions */
-  --transition-fast: 0.12s ease;
-  --transition-normal: 0.2s ease;
-  --transition-slow: 0.3s ease;
+  /* Transitions — matched to production cubic-bezier */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 [data-theme="dark"] {
-  --color-bg-primary: #0f172a;
-  --color-bg-secondary: #1e293b;
-  --color-bg-sidebar: #0f172a;
-  --color-bg-sidebar-hover: #1e293b;
-  --color-bg-sidebar-active: #334155;
-  --color-bg-hover: #1e293b;
-  --color-bg-active: #334155;
-  --color-bg-input: #1e293b;
-  --color-bg-message-user: #2d5a87;
-  --color-bg-message-assistant: #1e293b;
-  --color-bg-card: #1e293b;
-  --color-bg-suggestion: #1e293b;
-  --color-bg-suggestion-hover: #334155;
-  --color-bg-citation: #0f172a;
-  --color-bg-modal-overlay: rgba(0, 0, 0, 0.65);
+  /*
+   * Dark mode — neutral gray palette (like ChatGPT/Claude)
+   * NOT blue-tinted. Clean gray layers with clear separation.
+   * Sidebar: #202123 (ChatGPT sidebar)
+   * Main: #2f2f2f (ChatGPT main)
+   * Surface: #3a3a3a (elevated cards)
+   * Borders: #4a4a4a (clearly visible)
+   */
+  --color-bg-primary: #2f2f2f;
+  --color-bg-secondary: #3a3a3a;
+  --color-bg-sidebar: #202123;
+  --color-bg-sidebar-hover: #343541;
+  --color-bg-sidebar-active: #40414f;
+  --color-bg-hover: #3a3a3a;
+  --color-bg-active: #444654;
+  --color-bg-input: #3a3a3a;
+  --color-bg-message-user: linear-gradient(135deg, #2b3a52, #263248);
+  --color-bg-message-user-solid: #2b3a52;
+  --color-border-message-user: #3d5070;
+  --color-accent-user: #6db3f8;
+  --color-bg-message-assistant: #3a3a3a;
+  --color-bg-card: #3a3a3a;
+  --color-bg-suggestion: #343541;
+  --color-bg-suggestion-hover: #40414f;
+  --color-bg-citation: #2f2f2f;
+  --color-bg-modal-overlay: rgba(0, 0, 0, 0.6);
 
-  --color-text-primary: #e2e8f0;
-  --color-text-secondary: #94a3b8;
-  --color-text-muted: #64748b;
+  --color-text-primary: #ececf1;
+  --color-text-secondary: #c5c5d2;
+  --color-text-muted: #8e8ea0;
   --color-text-inverse: #ffffff;
-  --color-text-link: #7db5e8;
-  --color-text-sidebar: #94a3b8;
-  --color-text-sidebar-bright: #e2e8f0;
-  --color-text-sidebar-muted: #64748b;
+  --color-text-link: #7cb3f4;
+  --color-text-sidebar: #c5c5d2;
+  --color-text-sidebar-bright: #ececf1;
+  --color-text-sidebar-muted: #8e8ea0;
 
-  --color-border: #334155;
-  --color-border-light: #1e293b;
-  --color-border-sidebar: #334155;
-  --color-accent: #2d5a87;
-  --color-accent-hover: #1e3a5f;
-  --color-accent-light: #1e293b;
-  --color-accent-orange: #f26522;
-  --color-accent-orange-hover: #d9551a;
-  --color-bg-header-active: #142942;
-  --color-success-light: #1a2e1e;
+  --color-border: #4a4a4a;
+  --color-border-light: #3a3a3a;
+  --color-border-sidebar: #4a4a4a;
+  --color-accent: #5b9cf6;
+  --color-accent-hover: #4a8df5;
+  --color-accent-light: rgba(91, 156, 246, 0.15);
+  --color-accent-orange: #f97316;
+  --color-accent-orange-hover: #ea580c;
+  --color-bg-header-active: #1e3a5f;
+  --color-success-light: #1a3a24;
 
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.15);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.35);
-  --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.45);
+  /* Status badge dark mode */
+  --status-online-bg: rgba(34, 197, 94, 0.15);
+  --status-online-border: rgba(34, 197, 94, 0.3);
+  --status-online-text: #4ade80;
+  --status-offline-dot: #8e8ea0;
+  --status-offline-bg: rgba(142, 142, 160, 0.1);
+  --status-offline-border: rgba(142, 142, 160, 0.2);
+  --status-offline-text: #8e8ea0;
+  --status-error-bg: rgba(239, 68, 68, 0.12);
+  --status-error-border: rgba(239, 68, 68, 0.25);
+  --status-error-text: #f87171;
+
+  --shadow-xs: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.35), 0 2px 4px -2px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.35), 0 4px 8px -4px rgba(0, 0, 0, 0.25);
+  --shadow-xl: 0 20px 30px -5px rgba(0, 0, 0, 0.35), 0 8px 12px -6px rgba(0, 0, 0, 0.25);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 /* Reset */
@@ -183,9 +211,9 @@ textarea {
   outline: none;
 }
 
-/* Scrollbar */
+/* Scrollbar — production uses 6px width */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -193,12 +221,20 @@ textarea {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: #cbd5e1;
   border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-muted);
+  background: #94a3b8;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #565869;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #6b6d7b;
 }
 
 /* Sidebar scrollbar */
@@ -230,17 +266,17 @@ textarea {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.96); }
+  from { opacity: 0; transform: scale(0.97); }
   to { opacity: 1; transform: scale(1); }
 }
 
@@ -254,7 +290,7 @@ textarea {
   50% { opacity: 0.5; }
 }
 
-/* Watermark for main area */
+/* Watermark for main area — production uses 0.06 light */
 .main-watermark {
   position: relative;
 }
@@ -264,8 +300,8 @@ textarea {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 420px;
-  height: 420px;
+  width: 720px;
+  height: 720px;
   background-image: url("/pseg-logo.svg");
   background-repeat: no-repeat;
   background-position: center;
@@ -277,7 +313,8 @@ textarea {
 }
 
 [data-theme="dark"] .main-watermark::before {
-  opacity: 0.03;
+  opacity: 0.08;
+  filter: invert(0.85) brightness(1.2);
 }
 
 /* Focus-visible — keyboard-only focus ring */
@@ -342,10 +379,10 @@ input:focus-visible {
   to { opacity: 0; transform: translateY(4px); }
 }
 
-/* Chat input focus glow */
+/* Chat input focus glow — production uses navy/10 ring */
 .chat-input-container:focus-within {
   border-color: var(--color-accent) !important;
-  box-shadow: var(--shadow-sm), 0 0 0 3px rgba(30, 58, 95, 0.1) !important;
+  box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.08) !important;
 }
 
 [data-theme="dark"] .chat-input-container:focus-within {
@@ -361,6 +398,19 @@ input:focus-visible {
 .citation-items.collapsed {
   max-height: 0 !important;
   opacity: 0;
+}
+
+/* Dark mode: make PSEG logo visible on dark background */
+
+/* Dark mode specific enhancements */
+[data-theme="dark"] .chat-input-container {
+  border-color: #4a4a4a !important;
+  background: #3a3a3a !important;
+}
+
+[data-theme="dark"] .chat-input-container:focus-within {
+  border-color: #5b9cf6 !important;
+  box-shadow: 0 0 0 3px rgba(91, 156, 246, 0.2) !important;
 }
 
 /* Responsive: collapse sidebar on small screens */

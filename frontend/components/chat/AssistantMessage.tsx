@@ -37,8 +37,7 @@ export default function AssistantMessage({
       style={{
         display: "flex",
         marginBottom: "var(--spacing-lg)",
-        borderLeft: "3px solid var(--color-accent)",
-        paddingLeft: "var(--spacing-md)",
+        paddingLeft: 0,
       }}
     >
       <div style={{ flex: 1, minWidth: 0 }}>
@@ -48,7 +47,7 @@ export default function AssistantMessage({
             display: "flex",
             alignItems: "center",
             gap: "var(--spacing-sm)",
-            marginBottom: "var(--spacing-xs)",
+            marginBottom: 6,
           }}
         >
           <div
@@ -90,22 +89,24 @@ export default function AssistantMessage({
           )}
         </div>
 
-        {/* Response card */}
+        {/* Response card — white card with navy left border, matching reference */}
         <div
           style={{
-            padding: "14px 18px",
-            borderRadius: "var(--radius-lg)",
+            padding: "0.85rem 1.25rem",
+            borderRadius: 12,
             background: isError
               ? "var(--color-accent-light)"
               : "var(--color-bg-message-assistant)",
             border: `1px solid ${
-              isError ? "var(--color-danger)" : "var(--color-border-light)"
+              isError ? "var(--color-danger)" : "var(--color-border)"
             }`,
-            fontSize: "var(--font-size-base)",
-            lineHeight: 1.7,
+            borderLeft: isError
+              ? `4px solid var(--color-danger)`
+              : "4px solid var(--color-accent)",
+            fontSize: "var(--font-size-sm)",
+            lineHeight: 1.625,
             whiteSpace: "pre-wrap",
             wordBreak: "break-word",
-            boxShadow: "var(--shadow-xs)",
             color: isError
               ? "var(--color-danger)"
               : "var(--color-text-primary)",
@@ -139,7 +140,7 @@ export default function AssistantMessage({
               display: "flex",
               alignItems: "center",
               gap: "var(--spacing-sm)",
-              marginTop: "var(--spacing-sm)",
+              marginTop: 8,
               paddingLeft: 2,
             }}
           >
