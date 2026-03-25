@@ -25,6 +25,7 @@ const FEATURES = [
       </svg>
     ),
     bgColor: "#fef3c7",
+    borderColor: "#f59e0b",
     title: "Document Search",
     description:
       "Searches across indexed PSEG technical manuals using hybrid vector + keyword retrieval.",
@@ -42,6 +43,7 @@ const FEATURES = [
       </svg>
     ),
     bgColor: "#ffedd5",
+    borderColor: "#f26522",
     title: "Source Citations",
     description:
       "Every answer includes clickable PDF citations showing the exact document, section, and page.",
@@ -58,6 +60,7 @@ const FEATURES = [
       </svg>
     ),
     bgColor: "#f3e8ff",
+    borderColor: "#9333ea",
     title: "Conversation History",
     description:
       "All chat sessions are persisted and can be resumed at any time from the sidebar.",
@@ -76,6 +79,7 @@ const FEATURES = [
       </svg>
     ),
     bgColor: "#dbeafe",
+    borderColor: "#2563eb",
     title: "Follow-up Context",
     description:
       "Ask follow-up questions \u2014 the assistant remembers the conversation context.",
@@ -94,6 +98,7 @@ const FEATURES = [
       </svg>
     ),
     bgColor: "#fef9c3",
+    borderColor: "#f59e0b",
     title: "Answer Feedback",
     description:
       "Thumbs up/down on each response to help improve answer quality.",
@@ -383,6 +388,7 @@ export default function InfoModal({ open, onClose }: InfoModalProps) {
                     padding: "14px 16px",
                     borderRadius: "var(--radius-md)",
                     border: "1px solid var(--color-border-light)",
+                    borderLeft: `3px solid ${feature.borderColor}`,
                     background: "var(--color-bg-primary)",
                     display: "flex",
                     alignItems: "flex-start",

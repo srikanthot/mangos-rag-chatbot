@@ -1,39 +1,39 @@
 :root {
-  /* Colors - Light */
-  --color-bg-primary: #f5f6f8;
+  /* Colors - Light (matched to production palette) */
+  --color-bg-primary: #f7f9fc;
   --color-bg-secondary: #ffffff;
   --color-bg-sidebar: #ffffff;
-  --color-bg-sidebar-hover: #f0f2f5;
-  --color-bg-sidebar-active: #e8ecf1;
-  --color-bg-hover: #ebedf0;
-  --color-bg-active: #dde1e8;
+  --color-bg-sidebar-hover: #f1f5f9;
+  --color-bg-sidebar-active: #e2e8f0;
+  --color-bg-hover: #edf2f7;
+  --color-bg-active: #e2e8f0;
   --color-bg-input: #ffffff;
-  --color-bg-message-user: #0059b3;
+  --color-bg-message-user: #1e3a5f;
   --color-bg-message-assistant: #ffffff;
   --color-bg-card: #ffffff;
-  --color-bg-suggestion: #f0f4ff;
-  --color-bg-suggestion-hover: #e0e8ff;
-  --color-bg-citation: #fafbfc;
+  --color-bg-suggestion: #f1f5f9;
+  --color-bg-suggestion-hover: #e2e8f0;
+  --color-bg-citation: #f7f9fc;
   --color-bg-modal-overlay: rgba(0, 0, 0, 0.5);
 
-  --color-text-primary: #1a1d26;
-  --color-text-secondary: #5c6370;
-  --color-text-muted: #9098a6;
+  --color-text-primary: #2d3748;
+  --color-text-secondary: #4a5568;
+  --color-text-muted: #718096;
   --color-text-inverse: #ffffff;
-  --color-text-link: #0059b3;
+  --color-text-link: #1e3a5f;
   --color-text-sidebar: #4a5568;
-  --color-text-sidebar-bright: #1a1d26;
-  --color-text-sidebar-muted: #8a94a6;
+  --color-text-sidebar-bright: #2d3748;
+  --color-text-sidebar-muted: #718096;
 
-  --color-border: #e1e4ea;
-  --color-border-light: #eef0f4;
-  --color-border-sidebar: #e8ecf1;
-  --color-accent: #0059b3;
-  --color-accent-hover: #004a96;
-  --color-accent-light: #e8f0fe;
-  --color-accent-orange: #f37321;
-  --color-accent-orange-hover: #e0671d;
-  --color-bg-header-active: #1b2a4a;
+  --color-border: #e2e8f0;
+  --color-border-light: #edf2f7;
+  --color-border-sidebar: #e2e8f0;
+  --color-accent: #1e3a5f;
+  --color-accent-hover: #142942;
+  --color-accent-light: #ebf4ff;
+  --color-accent-orange: #f26522;
+  --color-accent-orange-hover: #d9551a;
+  --color-bg-header-active: #1e3a5f;
   --color-danger: #d32f2f;
   --color-success: #2e7d32;
   --color-success-light: #e8f5e9;
@@ -87,40 +87,40 @@
 }
 
 [data-theme="dark"] {
-  --color-bg-primary: #111318;
-  --color-bg-secondary: #1a1d24;
-  --color-bg-sidebar: #0d1017;
-  --color-bg-sidebar-hover: #1a1f2a;
-  --color-bg-sidebar-active: #242a38;
-  --color-bg-hover: #22262e;
-  --color-bg-active: #2a2f38;
-  --color-bg-input: #1a1d24;
-  --color-bg-message-user: #1a6ddb;
-  --color-bg-message-assistant: #1a1d24;
-  --color-bg-card: #1a1d24;
-  --color-bg-suggestion: #1a1f2e;
-  --color-bg-suggestion-hover: #222a3c;
-  --color-bg-citation: #15181e;
+  --color-bg-primary: #0f172a;
+  --color-bg-secondary: #1e293b;
+  --color-bg-sidebar: #0f172a;
+  --color-bg-sidebar-hover: #1e293b;
+  --color-bg-sidebar-active: #334155;
+  --color-bg-hover: #1e293b;
+  --color-bg-active: #334155;
+  --color-bg-input: #1e293b;
+  --color-bg-message-user: #2d5a87;
+  --color-bg-message-assistant: #1e293b;
+  --color-bg-card: #1e293b;
+  --color-bg-suggestion: #1e293b;
+  --color-bg-suggestion-hover: #334155;
+  --color-bg-citation: #0f172a;
   --color-bg-modal-overlay: rgba(0, 0, 0, 0.65);
 
-  --color-text-primary: #e4e6ea;
-  --color-text-secondary: #9298a4;
-  --color-text-muted: #5c6370;
+  --color-text-primary: #e2e8f0;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
   --color-text-inverse: #ffffff;
-  --color-text-link: #5a9ee6;
-  --color-text-sidebar: #b0b8c8;
-  --color-text-sidebar-bright: #e4e6ea;
-  --color-text-sidebar-muted: #5c6878;
+  --color-text-link: #7db5e8;
+  --color-text-sidebar: #94a3b8;
+  --color-text-sidebar-bright: #e2e8f0;
+  --color-text-sidebar-muted: #64748b;
 
-  --color-border: #2a2e38;
-  --color-border-light: #1f2329;
-  --color-border-sidebar: rgba(255, 255, 255, 0.08);
-  --color-accent: #4a94e0;
-  --color-accent-hover: #3a82d0;
-  --color-accent-light: #1a2a40;
-  --color-accent-orange: #f37321;
-  --color-accent-orange-hover: #e0671d;
-  --color-bg-header-active: #1b2a4a;
+  --color-border: #334155;
+  --color-border-light: #1e293b;
+  --color-border-sidebar: #334155;
+  --color-accent: #2d5a87;
+  --color-accent-hover: #1e3a5f;
+  --color-accent-light: #1e293b;
+  --color-accent-orange: #f26522;
+  --color-accent-orange-hover: #d9551a;
+  --color-bg-header-active: #142942;
   --color-success-light: #1a2e1e;
 
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.15);
@@ -259,23 +259,25 @@ textarea {
   position: relative;
 }
 .main-watermark::before {
-  content: "PSEG";
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 8rem;
-  font-weight: 800;
-  color: var(--color-border-light);
-  opacity: 0.35;
+  width: 420px;
+  height: 420px;
+  background-image: url("/pseg-logo.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0.06;
   pointer-events: none;
-  letter-spacing: 0.1em;
   user-select: none;
   z-index: 0;
 }
 
 [data-theme="dark"] .main-watermark::before {
-  opacity: 0.06;
+  opacity: 0.03;
 }
 
 /* Focus-visible — keyboard-only focus ring */
@@ -343,11 +345,11 @@ input:focus-visible {
 /* Chat input focus glow */
 .chat-input-container:focus-within {
   border-color: var(--color-accent) !important;
-  box-shadow: var(--shadow-sm), 0 0 0 3px rgba(0, 89, 179, 0.08) !important;
+  box-shadow: var(--shadow-sm), 0 0 0 3px rgba(30, 58, 95, 0.1) !important;
 }
 
 [data-theme="dark"] .chat-input-container:focus-within {
-  box-shadow: var(--shadow-sm), 0 0 0 3px rgba(74, 148, 224, 0.12) !important;
+  box-shadow: var(--shadow-sm), 0 0 0 3px rgba(45, 90, 135, 0.15) !important;
 }
 
 /* Citation panel collapse transition */
