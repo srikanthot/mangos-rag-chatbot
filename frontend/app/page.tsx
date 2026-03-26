@@ -140,12 +140,36 @@ export default function Home() {
     [cancelStream, showToast]
   );
 
-  // ── New chat ───────────────────────────────────────────────────
+  // ── New chat — creates a real backend conversation ─────────────
   const handleNewChat = useCallback(async () => {
     cancelStream();
-    setActiveConversation(null);
-    setMessages([]);
-  }, [cancelStream]);
+    try {
+      const conv = await api.createConversation("New Chat");
+      setActiveConversation(conv);
+      setMessages([]);
+      setConversations((prev) => [conv, ...prev]);
+    } catch {
+      // Fallback: clear UI even if backend fails
+      setActiveConversation(null);
+      setMessages([]);
+      showToast("Failed to create conversation");
+    }
+  }, [cancelStream, showToast]);
+
+  // ── Helper: ensure an active conversation exists ───────────────
+  const ensureConversation = useCallback(async (): Promise<Conversation | null> => {
+    if (activeConversation) return activeConversation;
+    try {
+      const conv = await api.createConversation("New Chat");
+      setActiveConversation(conv);
+      setMessages([]);
+      setConversations((prev) => [conv, ...prev]);
+      return conv;
+    } catch {
+      showToast("Failed to create conversation");
+      return null;
+    }
+  }, [activeConversation, showToast]);
 
   // ── Delete conversation ────────────────────────────────────────
   const handleDeleteConversation = useCallback(
@@ -217,8 +241,10 @@ export default function Home() {
       // Cancel any in-flight stream before starting a new one
       cancelStream();
 
-      // Determine session — use existing thread_id or null for new
-      const sessionId = activeConversation?.thread_id ?? null;
+      // Ensure a real backend conversation exists before sending
+      const conv = await ensureConversation();
+      if (!conv) return;
+      const sessionId = conv.thread_id;
 
       // Create AbortController for this stream
       const controller = new AbortController();
@@ -228,7 +254,7 @@ export default function Home() {
       const tempUserId = `temp-user-${Date.now()}`;
       const userMsg: Message = {
         id: tempUserId,
-        thread_id: sessionId ?? "",
+        thread_id: sessionId,
         role: "user",
         content,
         citations: [],
@@ -247,7 +273,7 @@ export default function Home() {
 
       const assistantPlaceholder: Message = {
         id: assistantMsgId,
-        thread_id: sessionId ?? "",
+        thread_id: sessionId,
         role: "assistant",
         content: "",
         citations: [],
@@ -295,23 +321,15 @@ export default function Home() {
             );
             setIsStreaming(false);
 
-            // Refresh conversation list to pick up new/updated titles
+            // Refresh conversation list to pick up updated titles
             api
               .listConversations()
               .then((convs) => {
                 setConversations(convs);
-                // If this was a new conversation, set it as active
-                if (!sessionId && convs.length > 0) {
-                  const newest = convs[0];
-                  setActiveConversation(newest);
-                  // Update thread_id on the messages
-                  setMessages((prev) =>
-                    prev.map((m) =>
-                      m.thread_id === ""
-                        ? { ...m, thread_id: newest.thread_id }
-                        : m
-                    )
-                  );
+                // Update active conversation metadata (title may have changed)
+                const updated = convs.find((c) => c.thread_id === sessionId);
+                if (updated) {
+                  setActiveConversation(updated);
                 }
               })
               .catch(() => {});
@@ -342,7 +360,7 @@ export default function Home() {
         controller.signal
       );
     },
-    [activeConversation, cancelStream]
+    [cancelStream, ensureConversation]
   );
 
   // ── Refresh conversations ──────────────────────────────────────
@@ -364,9 +382,9 @@ export default function Home() {
     [handleSendMessage]
   );
 
-  // ── Feedback ───────────────────────────────────────────────────
+  // ── Feedback (with optional comment) ───────────────────────────
   const handleFeedback = useCallback(
-    async (messageId: string, rating: "up" | "down") => {
+    async (messageId: string, rating: "up" | "down", comment?: string) => {
       const threadId = activeConversation?.thread_id;
       if (!threadId) return;
       try {
@@ -374,7 +392,7 @@ export default function Home() {
           thread_id: threadId,
           message_id: messageId,
           rating,
-          comment: "",
+          comment: comment ?? "",
         });
       } catch {
         showToast("Failed to submit feedback");
@@ -382,6 +400,51 @@ export default function Home() {
     },
     [activeConversation, showToast]
   );
+
+  // ── Retry last message ────────────────────────────────────────
+  const handleRetry = useCallback(
+    (lastUserContent: string) => {
+      if (!activeConversation || isStreaming) return;
+      // Remove the last assistant message (and optionally the last user message
+      // since we'll re-send it)
+      setMessages((prev) => {
+        const copy = [...prev];
+        // Remove trailing assistant message
+        if (copy.length > 0 && copy[copy.length - 1].role === "assistant") {
+          copy.pop();
+        }
+        // Remove trailing user message (we'll re-add it via handleSendMessage)
+        if (copy.length > 0 && copy[copy.length - 1].role === "user") {
+          copy.pop();
+        }
+        return copy;
+      });
+      // Re-send the same question
+      handleSendMessage(lastUserContent);
+    },
+    [activeConversation, isStreaming, handleSendMessage]
+  );
+
+  // ── Refresh messages for active conversation (tab focus) ─────
+  const handleRefreshMessages = useCallback(async () => {
+    if (!activeConversation) return;
+    try {
+      const msgs = await api.getMessages(activeConversation.thread_id);
+      setMessages(msgs);
+    } catch {
+      // silent — don't disrupt the user
+    }
+  }, [activeConversation]);
+
+  // Show ChatShell when there's an active conversation (even with 0 messages)
+  const showChatShell = activeConversation !== null;
+
+  // Extract up to 3 unique recent user questions for personalized "Try Asking"
+  const recentQuestions = conversations
+    .filter((c) => c.last_user_message_preview && c.last_user_message_preview.trim())
+    .map((c) => c.last_user_message_preview.trim())
+    .filter((q, i, arr) => arr.indexOf(q) === i) // deduplicate
+    .slice(0, 3);
 
   return (
     <div
@@ -516,18 +579,20 @@ export default function Home() {
                 Retry
               </button>
             </div>
-          ) : activeConversation &&
-            (messages.length > 0 || loadingMessages) ? (
+          ) : showChatShell ? (
             <ChatShell
-              conversation={activeConversation}
+              conversation={activeConversation!}
               messages={messages}
               isStreaming={isStreaming}
               loadingMessages={loadingMessages}
               onSend={handleSendMessage}
               onFeedback={handleFeedback}
+              onStarterPrompt={handleStarterPrompt}
+              onRetry={handleRetry}
+              onRefreshMessages={handleRefreshMessages}
             />
           ) : (
-            <EmptyState onStarterPrompt={handleStarterPrompt} onNewChat={handleNewChat} />
+            <EmptyState onStarterPrompt={handleStarterPrompt} onNewChat={handleNewChat} recentQuestions={recentQuestions} />
           )}
         </main>
       </div>

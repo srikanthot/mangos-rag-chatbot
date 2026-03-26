@@ -8,7 +8,7 @@ interface CitationPanelProps {
 }
 
 export default function CitationPanel({ citations }: CitationPanelProps) {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   if (citations.length === 0) return null;
 

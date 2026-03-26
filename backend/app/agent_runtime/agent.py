@@ -55,6 +55,7 @@ from agent_framework import AgentSession as AFAgentSession
  
 from app.agent_runtime.citation_provider import build_citations
 from app.agent_runtime.history_context_provider import format_history_block
+from app.agent_runtime.intent_classifier import classify_intent
 from app.agent_runtime.query_rewriter import rewrite_query
 from app.agent_runtime.session import AgentSession
 from app.api.schemas import Citation, CitationsPayload
@@ -404,6 +405,22 @@ class AgentRuntime:
         if is_storage_enabled():
             user_msg = await chat_store.append_user_message(thread_id, user_id, question)
  
+
+        # -- 2a. Intent classification -- short-circuit non-questions ----
+        has_history = user_msg is not None and user_msg.sequence > 1
+        intent, canned = classify_intent(question, has_history=has_history)
+        if canned is not None:
+            logger.info(
+                "Intent short-circuit | thread=%s intent=%s | question=%s",
+                thread_id, intent, question,
+            )
+            await _persist_assistant(thread_id, user_id, canned, [])
+            return {
+                "answer": canned,
+                "citations": [],
+                "thread_id": thread_id,
+                "session_id": thread_id,
+            }
         # ── 2b. Rewrite follow-up queries using conversation context ───────
         # Use only the last 4 messages (2 Q&A pairs) so the rewriter focuses on
         # the most recent topic and doesn't blend earlier unrelated topics.
@@ -521,6 +538,20 @@ class AgentRuntime:
         if is_storage_enabled():
             user_msg = await chat_store.append_user_message(thread_id, user_id, question)
  
+
+        # -- 2a. Intent classification -- short-circuit non-questions ----
+        has_history = user_msg is not None and user_msg.sequence > 1
+        intent, canned = classify_intent(question, has_history=has_history)
+        if canned is not None:
+            logger.info(
+                "Intent short-circuit | thread=%s intent=%s | question=%s",
+                thread_id, intent, question,
+            )
+            await _persist_assistant(thread_id, user_id, canned, [])
+            yield _sse_data(canned)
+            yield _sse_event("citations", CitationsPayload(citations=[]).model_dump_json())
+            yield _sse_data("[DONE]")
+            return
         # ── 2b. Rewrite follow-up queries using conversation context ───────
         # Use only the last 4 messages (2 Q&A pairs) so the rewriter focuses on
         # the most recent topic and doesn't blend earlier unrelated topics.

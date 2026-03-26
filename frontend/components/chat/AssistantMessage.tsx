@@ -6,54 +6,88 @@ import type { Message } from "@/lib/types";
 
 interface AssistantMessageProps {
   message: Message;
-  onFeedback: (messageId: string, rating: "up" | "down") => void;
+  onFeedback: (messageId: string, rating: "up" | "down", comment?: string) => void;
+  onRetry?: () => void;
+  isLatest?: boolean;
+}
+
+function formatTime(iso: string): string {
+  try {
+    return new Date(iso).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return "";
+  }
 }
 
 export default function AssistantMessage({
   message,
   onFeedback,
+  onRetry,
+  isLatest,
 }: AssistantMessageProps) {
   const [feedbackGiven, setFeedbackGiven] = useState<"up" | "down" | null>(
     null
   );
   const [submitting, setSubmitting] = useState(false);
+  const [showCommentBox, setShowCommentBox] = useState(false);
+  const [comment, setComment] = useState("");
 
   const isStreaming = message.status === "partial";
   const isError = message.status === "error";
+  const time = formatTime(message.created_at);
 
-  const handleFeedback = useCallback(
-    (rating: "up" | "down") => {
-      if (feedbackGiven || submitting) return;
-      setSubmitting(true);
-      setFeedbackGiven(rating);
-      onFeedback(message.id, rating);
-      setTimeout(() => setSubmitting(false), 1000);
-    },
-    [feedbackGiven, submitting, message.id, onFeedback]
-  );
+  const handleThumbsUp = useCallback(() => {
+    if (submitting) return;
+    // Allow re-selection: if already "up", do nothing; otherwise set/change to "up"
+    if (feedbackGiven === "up") return;
+    setSubmitting(true);
+    setFeedbackGiven("up");
+    setShowCommentBox(false);
+    setComment("");
+    onFeedback(message.id, "up");
+    setTimeout(() => setSubmitting(false), 1000);
+  }, [feedbackGiven, submitting, message.id, onFeedback]);
+
+  const handleThumbsDown = useCallback(() => {
+    if (submitting) return;
+    if (feedbackGiven === "down") return;
+    setFeedbackGiven("down");
+    setShowCommentBox(true);
+  }, [feedbackGiven, submitting]);
+
+  const handleSubmitDownvote = useCallback(() => {
+    if (submitting) return;
+    setSubmitting(true);
+    onFeedback(message.id, "down", comment.trim() || undefined);
+    setShowCommentBox(false);
+    setTimeout(() => setSubmitting(false), 1000);
+  }, [submitting, message.id, comment, onFeedback]);
 
   return (
     <div
       style={{
         display: "flex",
+        justifyContent: "flex-start",
         marginBottom: "var(--spacing-lg)",
-        paddingLeft: 0,
       }}
     >
-      <div style={{ flex: 1, minWidth: 0 }}>
-        {/* Avatar + label row */}
+      <div style={{ maxWidth: "85%", minWidth: 0 }}>
+        {/* Avatar + label + timestamp row */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             gap: "var(--spacing-sm)",
-            marginBottom: 6,
+            marginBottom: 4,
           }}
         >
           <div
             style={{
-              width: 28,
-              height: 28,
+              width: 26,
+              height: 26,
               borderRadius: "var(--radius-full)",
               background: "var(--color-accent)",
               display: "flex",
@@ -61,7 +95,7 @@ export default function AssistantMessage({
               justifyContent: "center",
               flexShrink: 0,
               color: "#ffffff",
-              fontSize: "var(--font-size-xs)",
+              fontSize: "var(--font-size-2xs)",
               fontWeight: 700,
             }}
           >
@@ -76,6 +110,16 @@ export default function AssistantMessage({
           >
             Assistant
           </span>
+          {time && (
+            <span
+              style={{
+                fontSize: "var(--font-size-2xs)",
+                color: "var(--color-text-muted)",
+              }}
+            >
+              {time}
+            </span>
+          )}
           {isStreaming && (
             <span
               style={{
@@ -89,11 +133,11 @@ export default function AssistantMessage({
           )}
         </div>
 
-        {/* Response card — white card with navy left border, matching reference */}
+        {/* Response card */}
         <div
           style={{
-            padding: "0.85rem 1.25rem",
-            borderRadius: 12,
+            padding: "0.75rem 1rem",
+            borderRadius: "4px 12px 12px 12px",
             background: isError
               ? "var(--color-accent-light)"
               : "var(--color-bg-message-assistant)",
@@ -133,49 +177,236 @@ export default function AssistantMessage({
           <CitationPanel citations={message.citations} />
         )}
 
-        {/* Feedback row */}
+        {/* Action row: feedback + retry */}
         {message.status === "complete" && !isError && (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "var(--spacing-sm)",
-              marginTop: 8,
-              paddingLeft: 2,
-            }}
-          >
-            <span
+          <div style={{ marginTop: 8, paddingLeft: 2 }}>
+            <div
               style={{
-                fontSize: "var(--font-size-xs)",
-                color: "var(--color-text-muted)",
+                display: "flex",
+                alignItems: "center",
+                gap: "var(--spacing-sm)",
               }}
             >
-              Helpful?
-            </span>
-            <FeedbackButton
-              type="up"
-              active={feedbackGiven === "up"}
-              disabled={feedbackGiven !== null}
-              onClick={() => handleFeedback("up")}
-            />
-            <FeedbackButton
-              type="down"
-              active={feedbackGiven === "down"}
-              disabled={feedbackGiven !== null}
-              onClick={() => handleFeedback("down")}
-            />
-            {feedbackGiven && (
               <span
                 style={{
-                  fontSize: "var(--font-size-2xs)",
+                  fontSize: "var(--font-size-xs)",
                   color: "var(--color-text-muted)",
-                  marginLeft: 4,
-                  animation: "fadeIn 0.3s ease",
                 }}
               >
-                Thanks!
+                Helpful?
               </span>
+              <FeedbackButton
+                type="up"
+                active={feedbackGiven === "up"}
+                disabled={submitting}
+                onClick={handleThumbsUp}
+              />
+              <FeedbackButton
+                type="down"
+                active={feedbackGiven === "down"}
+                disabled={submitting}
+                onClick={handleThumbsDown}
+              />
+              {feedbackGiven === "up" && (
+                <span
+                  style={{
+                    fontSize: "var(--font-size-2xs)",
+                    color: "var(--color-text-muted)",
+                    marginLeft: 4,
+                    animation: "fadeIn 0.3s ease",
+                  }}
+                >
+                  Thanks!
+                </span>
+              )}
+              {feedbackGiven === "down" && !showCommentBox && (
+                <span
+                  style={{
+                    fontSize: "var(--font-size-2xs)",
+                    color: "var(--color-text-muted)",
+                    marginLeft: 4,
+                    animation: "fadeIn 0.3s ease",
+                  }}
+                >
+                  Thanks for the feedback!
+                </span>
+              )}
+
+              {/* Retry button — only on the latest assistant message */}
+              {isLatest && onRetry && (
+                <>
+                  <div
+                    style={{
+                      width: 1,
+                      height: 14,
+                      background: "var(--color-border)",
+                      margin: "0 2px",
+                    }}
+                  />
+                  <button
+                    onClick={onRetry}
+                    title="Regenerate response"
+                    aria-label="Retry"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 4,
+                      padding: "2px 8px",
+                      borderRadius: "var(--radius-xs)",
+                      fontSize: "var(--font-size-2xs)",
+                      color: "var(--color-text-muted)",
+                      background: "transparent",
+                      cursor: "pointer",
+                      transition: "all var(--transition-fast)",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = "var(--color-accent)";
+                      e.currentTarget.style.background = "var(--color-bg-hover)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = "var(--color-text-muted)";
+                      e.currentTarget.style.background = "transparent";
+                    }}
+                  >
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                      <path
+                        d="M1.5 2v5h5M14.5 14V9h-5"
+                        stroke="currentColor"
+                        strokeWidth="1.4"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M13.35 5.65a6 6 0 0 0-10.2.85M2.65 10.35a6 6 0 0 0 10.2-.85"
+                        stroke="currentColor"
+                        strokeWidth="1.4"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    Retry
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Thumbs-down comment box */}
+            {showCommentBox && (
+              <div
+                style={{
+                  marginTop: 8,
+                  padding: "8px 10px",
+                  borderRadius: 8,
+                  border: "1px solid var(--color-border)",
+                  background: "var(--color-bg-secondary)",
+                  animation: "fadeIn 0.2s ease",
+                }}
+              >
+                <textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder="What went wrong? (optional)"
+                  rows={2}
+                  style={{
+                    width: "100%",
+                    resize: "none",
+                    background: "transparent",
+                    fontSize: "var(--font-size-xs)",
+                    lineHeight: 1.5,
+                    color: "var(--color-text-primary)",
+                    border: "none",
+                    outline: "none",
+                  }}
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: 6,
+                    marginTop: 4,
+                  }}
+                >
+                  <button
+                    onClick={() => {
+                      setShowCommentBox(false);
+                      handleSubmitDownvote();
+                    }}
+                    style={{
+                      fontSize: "var(--font-size-2xs)",
+                      color: "var(--color-text-muted)",
+                      padding: "3px 10px",
+                      borderRadius: 4,
+                      background: "transparent",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Skip
+                  </button>
+                  <button
+                    onClick={handleSubmitDownvote}
+                    disabled={submitting}
+                    style={{
+                      fontSize: "var(--font-size-2xs)",
+                      fontWeight: 600,
+                      color: "#fff",
+                      padding: "3px 12px",
+                      borderRadius: 4,
+                      background: "var(--color-accent)",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
             )}
+          </div>
+        )}
+
+        {/* Retry on error messages too */}
+        {isError && isLatest && onRetry && (
+          <div style={{ marginTop: 8, paddingLeft: 2 }}>
+            <button
+              onClick={onRetry}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 5,
+                padding: "5px 14px",
+                borderRadius: 6,
+                fontSize: "var(--font-size-xs)",
+                fontWeight: 600,
+                color: "var(--color-accent)",
+                background: "var(--color-bg-secondary)",
+                border: "1px solid var(--color-border)",
+                cursor: "pointer",
+                transition: "all var(--transition-fast)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "var(--color-accent)";
+                e.currentTarget.style.color = "#fff";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "var(--color-bg-secondary)";
+                e.currentTarget.style.color = "var(--color-accent)";
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M1.5 2v5h5M14.5 14V9h-5"
+                  stroke="currentColor"
+                  strokeWidth="1.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M13.35 5.65a6 6 0 0 0-10.2.85M2.65 10.35a6 6 0 0 0 10.2-.85"
+                  stroke="currentColor"
+                  strokeWidth="1.4"
+                  strokeLinecap="round"
+                />
+              </svg>
+              Retry
+            </button>
           </div>
         )}
       </div>

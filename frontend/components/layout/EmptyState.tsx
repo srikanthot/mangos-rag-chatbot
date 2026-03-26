@@ -5,9 +5,15 @@ import { STARTER_PROMPTS } from "@/lib/starter-prompts";
 interface EmptyStateProps {
   onStarterPrompt: (prompt: string) => void;
   onNewChat: () => void;
+  recentQuestions?: string[];
 }
 
-export default function EmptyState({ onStarterPrompt, onNewChat }: EmptyStateProps) {
+export default function EmptyState({ onStarterPrompt, onNewChat, recentQuestions }: EmptyStateProps) {
+  // Use personalized recent questions if available, otherwise static prompts
+  const prompts = recentQuestions && recentQuestions.length > 0
+    ? recentQuestions.map((q) => ({ prompt: q }))
+    : STARTER_PROMPTS;
+
   return (
     <div
       style={{
@@ -23,30 +29,6 @@ export default function EmptyState({ onStarterPrompt, onNewChat }: EmptyStatePro
         animation: "fadeIn 0.4s ease",
       }}
     >
-      {/* Styled chat bubble icon */}
-      <div
-        style={{
-          width: 56,
-          height: 56,
-          borderRadius: 16,
-          background: "linear-gradient(135deg, #818cf8, #a78bfa)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: "1rem",
-          boxShadow: "0 6px 20px rgba(129, 140, 248, 0.3)",
-        }}
-      >
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
-            fill="rgba(255,255,255,0.92)"
-            stroke="rgba(255,255,255,1)"
-            strokeWidth="0.5"
-          />
-        </svg>
-      </div>
-
       <h1
         style={{
           fontSize: "1.35rem",
@@ -121,7 +103,7 @@ export default function EmptyState({ onStarterPrompt, onNewChat }: EmptyStatePro
           marginBottom: 10,
         }}
       >
-        Try Asking
+        {recentQuestions && recentQuestions.length > 0 ? "Your Recent Questions" : "Try Asking"}
       </div>
 
       {/* Starter prompts */}
@@ -134,7 +116,7 @@ export default function EmptyState({ onStarterPrompt, onNewChat }: EmptyStatePro
           width: "100%",
         }}
       >
-        {STARTER_PROMPTS.map((item, i) => (
+        {prompts.map((item, i) => (
           <button
             key={i}
             onClick={() => onStarterPrompt(item.prompt)}

@@ -82,7 +82,7 @@
   /* Layout */
   --sidebar-width: 300px;
   --header-height: 56px;
-  --chat-max-width: 900px;
+  --chat-max-width: 1100px;
 
   /* Transitions — matched to production cubic-bezier */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
