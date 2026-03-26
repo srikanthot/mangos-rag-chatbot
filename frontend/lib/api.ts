@@ -5,9 +5,44 @@ import type {
   FeedbackPayload,
   HealthStatus,
 } from "./types";
+import { isEntraConfigured } from "./auth-config";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+
+/**
+ * MSAL instance accessor — lazily imported to avoid circular deps.
+ * Returns null when Entra is not configured (debug mode).
+ */
+async function getAccessToken(): Promise<string | null> {
+  if (!isEntraConfigured()) return null;
+
+  try {
+    // Dynamic import to avoid loading MSAL when not configured
+    const { PublicClientApplication } = await import("@azure/msal-browser");
+    const { msalConfig, loginRequest } = await import("./auth-config");
+
+    // Access the existing MSAL instance created by AuthGate.
+    // PublicClientApplication.prototype is not a singleton, but we can
+    // create a lightweight instance that shares the sessionStorage cache.
+    const instance = new PublicClientApplication(msalConfig);
+    await instance.initialize();
+
+    const accounts = instance.getAllAccounts();
+    if (accounts.length === 0) return null;
+
+    const response = await instance.acquireTokenSilent({
+      ...loginRequest,
+      account: accounts[0],
+    });
+    return response.accessToken;
+  } catch {
+    // Silent acquisition failed — user may need to re-authenticate.
+    // Don't block the request; EasyAuth headers will provide identity
+    // in production even without a Bearer token.
+    return null;
+  }
+}
 
 function getHeaders(): Record<string, string> {
   const headers: Record<string, string> = {
@@ -17,7 +52,7 @@ function getHeaders(): Record<string, string> {
   // In production, the backend extracts identity from the Entra token
   // forwarded by Azure App Service EasyAuth. This header is ignored
   // when real auth is active.
-  if (typeof window !== "undefined") {
+  if (!isEntraConfigured() && typeof window !== "undefined") {
     const debugUser = localStorage.getItem("debug_user_id");
     if (debugUser) {
       headers["X-Debug-User-Id"] = debugUser;
@@ -26,9 +61,24 @@ function getHeaders(): Record<string, string> {
   return headers;
 }
 
+/**
+ * Build headers with optional Bearer token.
+ * In Entra mode, tries to acquire an access token silently.
+ * Falls back to base headers if token acquisition fails.
+ */
+async function getAuthHeaders(): Promise<Record<string, string>> {
+  const headers = getHeaders();
+  const token = await getAccessToken();
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  return headers;
+}
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const authHeaders = await getAuthHeaders();
   const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { ...getHeaders(), ...options?.headers },
+    headers: { ...authHeaders, ...options?.headers },
     ...options,
   });
   if (!res.ok) {
@@ -120,9 +170,10 @@ export async function streamChat(
 
   let res: Response;
   try {
+    const authHeaders = await getAuthHeaders();
     res = await fetch(`${BASE_URL}/chat/stream`, {
       method: "POST",
-      headers: getHeaders(),
+      headers: authHeaders,
       body: JSON.stringify({ question, session_id: sessionId }),
       signal,
     });

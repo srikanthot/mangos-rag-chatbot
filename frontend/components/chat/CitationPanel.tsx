@@ -5,9 +5,10 @@ import type { Citation } from "@/lib/types";
 
 interface CitationPanelProps {
   citations: Citation[];
+  onOpenPdf?: (citation: Citation) => void;
 }
 
-export default function CitationPanel({ citations }: CitationPanelProps) {
+export default function CitationPanel({ citations, onOpenPdf }: CitationPanelProps) {
   const [collapsed, setCollapsed] = useState(true);
 
   if (citations.length === 0) return null;
@@ -142,10 +143,14 @@ export default function CitationPanel({ citations }: CitationPanelProps) {
                   )}
                 </div>
                 {hasUrl ? (
-                  <a
-                    href={c.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    onClick={() => {
+                      if (onOpenPdf) {
+                        onOpenPdf(c);
+                      } else {
+                        window.open(c.url, "_blank", "noopener,noreferrer");
+                      }
+                    }}
                     aria-label={`Open PDF: ${displayTitle}`}
                     style={{
                       padding: "4px 10px",
@@ -159,8 +164,7 @@ export default function CitationPanel({ citations }: CitationPanelProps) {
                       transition: "all var(--transition-fast)",
                       flexShrink: 0,
                       marginTop: 2,
-                      textDecoration: "none",
-                      display: "inline-block",
+                      cursor: "pointer",
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.background =
@@ -179,7 +183,7 @@ export default function CitationPanel({ citations }: CitationPanelProps) {
                     }}
                   >
                     Open PDF
-                  </a>
+                  </button>
                 ) : (
                   <span
                     aria-label="No link available"

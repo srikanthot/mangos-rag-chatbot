@@ -10,6 +10,7 @@ first occurrence of each key is the most relevant chunk.
 """
  
 from app.api.schemas import Citation
+from app.tools.sas_helper import sign_url
  
  
 def _section_path(r: dict) -> str:
@@ -46,7 +47,7 @@ def build_citations(results: list[dict]) -> list[Citation]:
                     source=r["source"],
                     title=r.get("title", ""),
                     section=_section_path(r),
-                    url=r.get("url", ""),
+                    url=sign_url(r.get("url", "")),
                     chunk_id=r.get("chunk_id", ""),
                     page=r.get("page", ""),
                 )

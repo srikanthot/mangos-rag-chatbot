@@ -40,10 +40,11 @@ export default function Sidebar({
 
   return (
     <div
+      className={`sidebar-mobile${!open ? " sidebar-mobile-hidden" : ""}`}
       style={{
         width: open ? "var(--sidebar-width)" : 0,
         flexShrink: 0,
-        transition: "width var(--transition-slow)",
+        transition: "width var(--transition-slow), transform var(--transition-slow)",
         position: "relative",
         height: "100vh",
         padding: open ? "8px 0 8px 8px" : 0,
@@ -60,6 +61,8 @@ export default function Sidebar({
           borderRadius: 14,
           border: "1px solid var(--color-border-sidebar)",
           boxShadow: "var(--shadow-sm)",
+          opacity: open ? 1 : 0,
+          transition: "opacity var(--transition-normal)",
         }}
       >
         {/* Logo */}
@@ -117,7 +120,7 @@ export default function Sidebar({
           <NewChatButton onClick={onNewChat} />
         </div>
 
-        {/* Recent header with count + refresh */}
+        {/* Conversations header with refresh */}
         <div
           style={{
             padding: "0 14px",
@@ -137,7 +140,7 @@ export default function Sidebar({
               padding: "0 4px",
             }}
           >
-            Recent{conversations.length > 0 ? ` (${conversations.length})` : ""}
+            Conversations
           </div>
           <button
             onClick={onRefreshConversations}
@@ -194,16 +197,13 @@ export default function Sidebar({
           }}
         >
           {loading ? (
-            <div
-              style={{
-                padding: "var(--spacing-lg) var(--spacing-md)",
-                textAlign: "center",
-                fontSize: "var(--font-size-xs)",
-                color: "var(--color-text-sidebar-muted)",
-                animation: "pulse 1.5s ease-in-out infinite",
-              }}
-            >
-              Loading conversations...
+            <div style={{ display: "flex", flexDirection: "column", gap: 6, padding: "8px 6px" }}>
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} style={{ padding: "8px 10px", borderRadius: "var(--radius-md)" }}>
+                  <div className="skeleton" style={{ width: i % 2 === 0 ? "70%" : "85%", height: 14, marginBottom: 6 }} />
+                  <div className="skeleton" style={{ width: 50, height: 10 }} />
+                </div>
+              ))}
             </div>
           ) : (
             <ConversationList

@@ -23,13 +23,14 @@ const RELEASES = [
     badge: "Current Release",
     badgeColor: "#16a34a",
     items: [
-      "Redesigned interface with PSEG branding and modern layout",
-      "Real-time streaming responses with typing indicators",
-      "Conversation history with rename and delete",
-      "Collapsible source citation panel with PDF links",
-      "Thumbs up/down feedback on each response",
-      "Dark mode with neutral gray theme",
-      "Floating sidebar with smooth collapse animation",
+      "New React/Next.js frontend with modern UI and real-time streaming.",
+      "Redesigned citation panel with PDF name, section breadcrumbs, and clickable links.",
+      "Per-message feedback (thumbs up/down) stored in Cosmos DB.",
+      "Info & Help modal with usage guide, feature list, and changelog.",
+      "Persistent conversation history \u2014 pick up where you left off.",
+      "Dark mode support with PSEG brand-consistent color palette.",
+      "Starter question suggestions on the empty state screen.",
+      "Overall chatbot feedback via Microsoft Forms link.",
     ],
   },
   {
@@ -38,10 +39,10 @@ const RELEASES = [
     badge: "Initial Release",
     badgeColor: "#6b7280",
     items: [
-      "Basic chat functionality with document search",
-      "Hybrid vector + keyword retrieval",
-      "Source citation support",
-      "Session-based conversation tracking",
+      "Initial release with Streamlit frontend.",
+      "Azure AI Search hybrid retrieval with semantic reranking.",
+      "Conversation history stored in Azure Cosmos DB.",
+      "Basic citation display with document source links.",
     ],
   },
 ];
@@ -56,7 +57,7 @@ const FEATURES = [
       "Searches across indexed PSEG technical manuals using hybrid vector + keyword retrieval.",
   },
   {
-    emoji: "\uD83D\uDCCB",
+    emoji: "\uD83D\uDCC4",
     bgColor: "#ffedd5",
     borderColor: "#f26522",
     title: "Source Citations",
@@ -80,12 +81,36 @@ const FEATURES = [
       "Ask follow-up questions \u2014 the assistant remembers the conversation context.",
   },
   {
-    emoji: "\uD83D\uDD25",
+    emoji: "\uD83D\uDC4D",
     bgColor: "#fef9c3",
     borderColor: "#f59e0b",
     title: "Answer Feedback",
     description:
       "Thumbs up/down on each response to help improve answer quality.",
+  },
+  {
+    emoji: "\uD83C\uDF19",
+    bgColor: "#e0e7ff",
+    borderColor: "#4f46e5",
+    title: "Dark Mode",
+    description:
+      "Toggle between light and dark themes for comfortable reading.",
+  },
+  {
+    emoji: "\uD83D\uDCF1",
+    bgColor: "#ecfdf5",
+    borderColor: "#10b981",
+    title: "Responsive Design",
+    description:
+      "Works on desktop, tablet, and mobile \u2014 collapsible sidebar for smaller screens.",
+  },
+  {
+    emoji: "\u26A1",
+    bgColor: "#fef3c7",
+    borderColor: "#d97706",
+    title: "Streaming Responses",
+    description:
+      "Watch answers arrive in real-time as the AI generates them.",
   },
 ];
 
@@ -350,8 +375,41 @@ export default function InfoModal({ open, onClose }: InfoModalProps) {
                   continuity.
                 </li>
                 <li>
-                  Use the source citations to verify answers against the original
-                  documents.
+                  Click on source citations to open the original PDF document.
+                </li>
+                <li>
+                  Use the thumbs up/down buttons to help improve answer quality
+                  over time.
+                </li>
+              </ul>
+
+              <h3
+                style={{
+                  fontSize: "var(--font-size-base)",
+                  fontWeight: 600,
+                  color: "var(--color-text-primary)",
+                  marginBottom: "var(--spacing-sm)",
+                }}
+              >
+                Managing Conversations
+              </h3>
+              <ul
+                style={{
+                  paddingLeft: 20,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 6,
+                  marginBottom: "var(--spacing-lg)",
+                }}
+              >
+                <li>All conversations are automatically saved.</li>
+                <li>Click any conversation in the sidebar to resume it.</li>
+                <li>
+                  Right-click or use the menu icon to rename or delete
+                  conversations.
+                </li>
+                <li>
+                  Toggle dark mode using the button at the bottom of the sidebar.
                 </li>
               </ul>
             </div>

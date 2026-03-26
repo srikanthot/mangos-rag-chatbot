@@ -77,6 +77,11 @@ export default function ConversationItem({
       aria-label={`${conversation.title}, ${formatTimestamp(conversation.updated_at)}`}
       aria-current={isActive ? "true" : undefined}
       onClick={() => !editing && onSelect()}
+      onDoubleClick={(e) => {
+        e.stopPropagation();
+        setEditValue(conversation.title);
+        setEditing(true);
+      }}
       onKeyDown={handleContainerKeyDown}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}

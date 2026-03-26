@@ -41,3 +41,16 @@ export function getDebugUserId(): string {
   }
   return id;
 }
+
+/** Get the user's display name (set during welcome prompt) */
+export function getUserName(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("user_display_name");
+}
+
+/** Save user's display name */
+export function setUserName(name: string): void {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("user_display_name", name.trim());
+  }
+}

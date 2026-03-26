@@ -270,6 +270,11 @@ textarea {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes messageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -288,6 +293,23 @@ textarea {
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--color-border-light) 25%, var(--color-bg-hover) 50%, var(--color-border-light) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm);
 }
 
 /* Watermark for main area — production uses 0.06 light */
@@ -413,9 +435,44 @@ input:focus-visible {
   box-shadow: 0 0 0 3px rgba(91, 156, 246, 0.2) !important;
 }
 
-/* Responsive: collapse sidebar on small screens */
+/* Responsive: overlay sidebar on small screens */
 @media (max-width: 768px) {
   :root {
-    --sidebar-width: 260px;
+    --sidebar-width: 280px;
+  }
+}
+
+/* Mobile sidebar overlay */
+.sidebar-overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar-mobile {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 100 !important;
+    height: 100vh !important;
+    padding: 0 !important;
+    width: var(--sidebar-width) !important;
+  }
+
+  .sidebar-mobile aside {
+    border-radius: 0 14px 14px 0 !important;
+  }
+
+  .sidebar-mobile-hidden {
+    transform: translateX(-100%);
+    pointer-events: none;
+  }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 99;
+    animation: fadeIn 0.2s ease;
   }
 }

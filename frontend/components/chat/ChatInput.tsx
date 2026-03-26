@@ -24,6 +24,8 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
     if (!trimmed || disabled) return;
     onSend(trimmed);
     setValue("");
+    setSendPulse(true);
+    setTimeout(() => setSendPulse(false), 300);
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
@@ -36,6 +38,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
     }
   };
 
+  const [sendPulse, setSendPulse] = useState(false);
   const canSend = value.trim().length > 0 && !disabled;
   const charCount = value.length;
   const showCharCount = charCount > MAX_MESSAGE_LENGTH * 0.8;
@@ -43,7 +46,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
   return (
     <div
       style={{
-        padding: "12px var(--spacing-md) 14px",
+        padding: "6px var(--spacing-md) 2px",
         background: "var(--color-bg-primary)",
         borderTop: "1px solid var(--color-border)",
         flexShrink: 0,
@@ -113,6 +116,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
               justifyContent: "center",
               transition: "all var(--transition-fast)",
               flexShrink: 0,
+              transform: sendPulse ? "scale(0.85)" : "scale(1)",
             }}
           >
             <svg
@@ -140,33 +144,33 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "center",
             alignItems: "center",
-            marginTop: 6,
+            marginTop: 2,
             padding: "0 4px",
+            gap: "var(--spacing-sm)",
           }}
         >
           <div
             style={{
-              fontSize: "var(--font-size-2xs)",
+              fontSize: "0.55rem",
               color: "var(--color-text-muted)",
-              flex: 1,
-              textAlign: "center",
+              opacity: 0.45,
+              lineHeight: 1,
             }}
           >
-            Shift+Enter for new line &middot; Responses are AI-generated &mdash; always verify critical information.
+            AI-generated &mdash; verify critical information
           </div>
           {showCharCount && (
             <div
               style={{
-                fontSize: "var(--font-size-2xs)",
+                fontSize: "0.6rem",
                 color:
                   charCount >= MAX_MESSAGE_LENGTH
                     ? "var(--color-danger)"
                     : "var(--color-text-muted)",
                 fontWeight: charCount >= MAX_MESSAGE_LENGTH ? 600 : 400,
                 flexShrink: 0,
-                marginLeft: "var(--spacing-sm)",
               }}
             >
               {charCount}/{MAX_MESSAGE_LENGTH}

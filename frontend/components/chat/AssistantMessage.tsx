@@ -2,7 +2,9 @@
 
 import { useState, useCallback } from "react";
 import CitationPanel from "./CitationPanel";
-import type { Message } from "@/lib/types";
+import MarkdownRenderer from "./MarkdownRenderer";
+import PdfViewer from "./PdfViewer";
+import type { Message, Citation } from "@/lib/types";
 
 interface AssistantMessageProps {
   message: Message;
@@ -35,9 +37,20 @@ export default function AssistantMessage({
   const [showCommentBox, setShowCommentBox] = useState(false);
   const [comment, setComment] = useState("");
 
+  const [copied, setCopied] = useState(false);
+  const [activePdf, setActivePdf] = useState<Citation | null>(null);
+
   const isStreaming = message.status === "partial";
   const isError = message.status === "error";
   const time = formatTime(message.created_at);
+
+  const handleCopy = useCallback(() => {
+    if (!message.content) return;
+    navigator.clipboard.writeText(message.content).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }).catch(() => {});
+  }, [message.content]);
 
   const handleThumbsUp = useCallback(() => {
     if (submitting) return;
@@ -74,7 +87,7 @@ export default function AssistantMessage({
         marginBottom: "var(--spacing-lg)",
       }}
     >
-      <div style={{ maxWidth: "85%", minWidth: 0 }}>
+      <div style={{ maxWidth: "100%", minWidth: 0, width: "100%" }}>
         {/* Avatar + label + timestamp row */}
         <div
           style={{
@@ -149,32 +162,51 @@ export default function AssistantMessage({
               : "4px solid var(--color-accent)",
             fontSize: "var(--font-size-sm)",
             lineHeight: 1.625,
-            whiteSpace: "pre-wrap",
             wordBreak: "break-word",
             color: isError
               ? "var(--color-danger)"
               : "var(--color-text-primary)",
           }}
         >
-          {message.content || (isStreaming ? "\u00A0" : "")}
-          {isStreaming && (
-            <span
-              style={{
-                display: "inline-block",
-                width: 2,
-                height: "1em",
-                background: "var(--color-accent)",
-                marginLeft: 2,
-                animation: "pulse 0.8s ease-in-out infinite",
-                verticalAlign: "text-bottom",
-              }}
-            />
-          )}
+          {message.content ? (
+            <>
+              <MarkdownRenderer content={message.content} />
+              {isStreaming && (
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: 2,
+                    height: "1em",
+                    background: "var(--color-accent)",
+                    marginLeft: 2,
+                    animation: "pulse 0.8s ease-in-out infinite",
+                    verticalAlign: "text-bottom",
+                  }}
+                />
+              )}
+            </>
+          ) : isStreaming ? (
+            <span>&nbsp;</span>
+          ) : null}
         </div>
 
         {/* Citations */}
         {message.citations && message.citations.length > 0 && !isStreaming && (
-          <CitationPanel citations={message.citations} />
+          <CitationPanel
+            citations={message.citations}
+            onOpenPdf={(citation) => setActivePdf(citation)}
+          />
+        )}
+
+        {/* PDF Viewer Panel */}
+        {activePdf && (
+          <PdfViewer
+            url={activePdf.url}
+            title={activePdf.title || activePdf.source || "Document"}
+            section={activePdf.section}
+            page={activePdf.page}
+            onClose={() => setActivePdf(null)}
+          />
         )}
 
         {/* Action row: feedback + retry */}
@@ -187,6 +219,58 @@ export default function AssistantMessage({
                 gap: "var(--spacing-sm)",
               }}
             >
+              {/* Copy button */}
+              <button
+                onClick={handleCopy}
+                title={copied ? "Copied!" : "Copy response"}
+                aria-label="Copy response"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 4,
+                  padding: "2px 8px",
+                  borderRadius: "var(--radius-xs)",
+                  fontSize: "var(--font-size-2xs)",
+                  color: copied ? "var(--color-success)" : "var(--color-text-muted)",
+                  background: "transparent",
+                  cursor: "pointer",
+                  transition: "all var(--transition-fast)",
+                }}
+                onMouseEnter={(e) => {
+                  if (!copied) {
+                    e.currentTarget.style.color = "var(--color-accent)";
+                    e.currentTarget.style.background = "var(--color-bg-hover)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!copied) {
+                    e.currentTarget.style.color = "var(--color-text-muted)";
+                    e.currentTarget.style.background = "transparent";
+                  }
+                }}
+              >
+                {copied ? (
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                    <path d="M3 8.5l3 3 7-7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                ) : (
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                    <rect x="5" y="5" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
+                    <path d="M3 11V3.5A.5.5 0 0 1 3.5 3H11" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+                  </svg>
+                )}
+                {copied ? "Copied" : "Copy"}
+              </button>
+
+              <div
+                style={{
+                  width: 1,
+                  height: 14,
+                  background: "var(--color-border)",
+                  margin: "0 2px",
+                }}
+              />
+
               <span
                 style={{
                   fontSize: "var(--font-size-xs)",

@@ -6,8 +6,10 @@ import Header from "@/components/layout/Header";
 import EmptyState from "@/components/layout/EmptyState";
 import ChatShell from "@/components/chat/ChatShell";
 import InfoModal from "@/components/layout/InfoModal";
+import WelcomeModal from "@/components/layout/WelcomeModal";
 import * as api from "@/lib/api";
-import { getDebugUserId } from "@/lib/utils";
+import { getDebugUserId, getUserName, setUserName } from "@/lib/utils";
+import { isEntraConfigured } from "@/lib/auth-config";
 import type { Conversation, Message, Citation, ThemeMode } from "@/lib/types";
 
 interface Toast {
@@ -31,6 +33,7 @@ export default function Home() {
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [backendOnline, setBackendOnline] = useState(true);
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   // Ref to track the streaming assistant message content for stable updates
   const streamContentRef = useRef("");
@@ -60,8 +63,14 @@ export default function Home() {
       setTheme(saved);
       document.documentElement.setAttribute("data-theme", saved);
     }
-    // Ensure debug user exists for local dev
-    getDebugUserId();
+    // In debug mode: ensure debug user exists and prompt for name
+    // In Entra mode: identity comes from Microsoft — skip WelcomeModal
+    if (!isEntraConfigured()) {
+      getDebugUserId();
+      if (!getUserName()) {
+        setShowWelcome(true);
+      }
+    }
   }, []);
 
   const toggleTheme = () => {
@@ -155,6 +164,18 @@ export default function Home() {
       showToast("Failed to create conversation");
     }
   }, [cancelStream, showToast]);
+
+  // ── Keyboard shortcuts (Ctrl+N for new chat) ────────────────────
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "n") {
+        e.preventDefault();
+        handleNewChat();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [handleNewChat]);
 
   // ── Helper: ensure an active conversation exists ───────────────
   const ensureConversation = useCallback(async (): Promise<Conversation | null> => {
@@ -476,8 +497,8 @@ export default function Home() {
           flexDirection: "column",
           minWidth: 0,
           background: "var(--color-bg-primary)",
-          borderRadius: 14,
-          margin: "8px 8px 8px 0",
+          borderRadius: "14px 14px 6px 6px",
+          margin: "8px 8px 2px 0",
           overflow: "hidden",
           boxShadow: "var(--shadow-sm)",
         }}
@@ -596,7 +617,24 @@ export default function Home() {
           )}
         </main>
       </div>
+      {/* Mobile sidebar overlay */}
+      {sidebarOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
       <InfoModal open={infoOpen} onClose={() => setInfoOpen(false)} />
+
+      {/* Welcome modal — first visit */}
+      {showWelcome && (
+        <WelcomeModal
+          onSubmit={(name) => {
+            setUserName(name);
+            setShowWelcome(false);
+          }}
+        />
+      )}
 
       {/* Toast notifications */}
       {toasts.length > 0 && (

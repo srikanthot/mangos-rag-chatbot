@@ -120,6 +120,16 @@ COSMOS_ENABLE_TTL: bool = os.getenv("COSMOS_ENABLE_TTL", "false").lower() == "tr
 COSMOS_TTL_SECONDS: int = int(os.getenv("COSMOS_TTL_SECONDS", "7776000"))  # 90 days
  
 # ---------------------------------------------------------------------------
+# Azure Blob Storage — SAS token generation for PDF citation URLs
+# ---------------------------------------------------------------------------
+# Required to generate short-lived signed URLs so the frontend can open PDFs.
+# The storage account key never leaves the backend.
+AZURE_STORAGE_ACCOUNT_NAME: str = os.getenv("AZURE_STORAGE_ACCOUNT_NAME", "")
+AZURE_STORAGE_ACCOUNT_KEY: str = os.getenv("AZURE_STORAGE_ACCOUNT_KEY", "")
+# How long (minutes) a generated SAS token remains valid. Default: 60 min.
+SAS_TOKEN_EXPIRY_MINUTES: int = int(os.getenv("SAS_TOKEN_EXPIRY_MINUTES", "60"))
+
+# ---------------------------------------------------------------------------
 # Identity — local dev default user when no auth headers are present
 # ---------------------------------------------------------------------------
 DEFAULT_LOCAL_USER_ID: str = os.getenv("DEFAULT_LOCAL_USER_ID", "local-user")

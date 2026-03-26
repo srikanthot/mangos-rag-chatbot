@@ -20,7 +20,7 @@ export default function ChatMessage({
   isLatestAssistant,
 }: ChatMessageProps) {
   return (
-    <div style={{ animation: `fadeIn 0.3s ease ${Math.min(index * 0.05, 0.3)}s both` }}>
+    <div style={{ animation: `messageIn 0.35s ease ${Math.min(index * 0.04, 0.25)}s both` }}>
       {message.role === "user" ? (
         <UserMessage message={message} />
       ) : (
